@@ -1,0 +1,24 @@
+# Ignore vagrant
+.vagrant
+
+# Ignore debug folder
+/debug
+
+# Apple stuff
+.DS_Store
+
+# Ignore aptcacher data
+/apt
+
+# Ignore Rubymine stuff
+.idea
+
+# Ignore tmp 
+/tmp
+
+# Ignore Rally Log
+/rally/log
+
+.settings
+.project
+
