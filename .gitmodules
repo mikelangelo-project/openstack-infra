@@ -66,10 +66,6 @@ url=https://github.com/gwdg/puppet-dns.git
 	path = puppet/modules/horizon
 	url = https://github.com/gwdg/puppet-horizon.git
 	branch = liberty
-[submodule "inifile"]
-	path = inifile
-	url = https://github.com/gwdg/puppetlabs-inifile.git
-	branch = liberty
 [submodule "puppet/modules/java"]
 	path = puppet/modules/java
 	url = https://github.com/gwdg/puppetlabs-java.git
@@ -93,4 +89,8 @@ url=https://github.com/gwdg/puppet-dns.git
 [submodule "puppet/modules/logstash"]
 	path = puppet/modules/logstash
 	url = https://github.com/gwdg/puppet-logstash.git
+	branch = liberty
+[submodule "puppet/modules/inifile"]
+	path = puppet/modules/inifile
+	url = https://github.com/gwdg/puppetlabs-inifile.git
 	branch = liberty
