@@ -1,0 +1,1108 @@
+# OpenStack setup for Liberty / Vagrant
+
+# -------------------------------------------------- General setup -----------------------------------------------------
+
+node::provisioning_ip:                                          "%{::ipaddress_eth1}"
+node::management_ip:                                            "%{::ipaddress_eth2}"
+node::overlay_ip:                                               "%{::ipaddress_eth3}"
+node::public_ip:                                                "%{::ipaddress_eth4}"
+node::storage_ip:                                               "%{::ipaddress_eth5}"
+
+# ------ Base cloud configuration ------
+
+cloud::production:                                              false
+
+cloud::global::region:                                          'RegionOne'
+cloud::global::hypervisor:                                      'qemu'
+
+cloud::global::workers:                                         2
+
+cloud::global::dns_server1:                                     '134.76.10.46'
+cloud::global::dns_server2:                                     '134.76.33.21'
+
+cloud::global::ldap_server:                                     ''
+
+cloud::global::package_ensure:                                  'latest'
+
+cloud::ntp_servers:
+    - 'ntps1.gwdg.de'
+    - 'ntps2.gwdg.de'
+    - 'ntps3.gwdg.de'
+
+cloud::dns_ips:
+    - "%{hiera('cloud::global::dns_server1')}"
+    - "%{hiera('cloud::global::dns_server2')}"
+
+cloud::site_domain:                                             'dev.cloud.gwdg.de'
+
+cloud::profile::aptly::vhost:                                   "puppetmaster.%{hiera('cloud::site_domain')}"
+
+cloud::manage_root_password:                                    false
+cloud::root_password:                                           '0wnm3!'
+
+# Storage setup
+
+cloud::global::storage::ceph_glance_key:                        ''
+cloud::global::storage::ceph_glance_user:                       'glance'
+cloud::global::storage::ceph_glance_pool:                       'os-images'
+
+cloud::global::storage::ceph_cinder_key:                        ''
+cloud::global::storage::ceph_cinder_user:                       'cinder'
+cloud::global::storage::ceph_cinder_pool:                       'os-volumes'
+
+cloud::global::storage::ceph_nova_key:                          "%{hiera('cloud::global::storage::ceph_cinder_key')}"
+cloud::global::storage::ceph_nova_user:                         "%{hiera('cloud::global::storage::ceph_cinder_user')}"
+cloud::global::storage::ceph_nova_pool:                         'os-vms'
+
+cloud::global::storage::ceph_cinder_backup_key:                 ''
+cloud::global::storage::ceph_cinder_backup_user:                'cinder-backup'
+cloud::global::storage::ceph_cinder_backup_pool:                'os-backup'
+
+cloud::global::storage::ceph_fsid:                              ''
+
+cloud::global::storage::ceph_public_network:                    '10.108.32.0/24'
+cloud::global::storage::ceph_cluster_network:                   '10.108.31.128/25'
+
+cloud::global::storage::nfs_server:                             "%{hiera('vagrant::ip_prefix')}.200.6"
+cloud::global::storage::nfs_share:                              '/storage'
+cloud::global::storage::nfs_options:                            '_netdev,vers=3'
+
+# Network setup
+
+cloud::global::ssh_port:                                        '22'
+
+cloud::global::network::provisioning_interface:                 'eth1'
+cloud::global::network::management_interface:                   'eth2'
+cloud::global::network::overlay_interface:                      'eth3'
+cloud::global::network::public_interface:                       'eth4'
+cloud::global::network::storage_interface:                      'eth5'
+
+cloud::global::network::provisioning_network:                   "10.%{hiera('vagrant::environment')}.254.0/24"
+cloud::global::network::management_network:                     "10.%{hiera('vagrant::environment')}.1.0/24"
+cloud::global::network::overlay_network:                        "10.%{hiera('vagrant::environment')}.2.0/24"
+cloud::global::network::public_network:                         "10.%{hiera('vagrant::environment')}.100.0/24"
+cloud::global::network::storage_network:                        "10.%{hiera('vagrant::environment')}.200.0/24"
+
+cloud::global::network::management_gateway:                     "10.%{hiera('vagrant::environment')}.1.1"
+cloud::global::network::public_gateway:                         "10.%{hiera('vagrant::environment')}.100.1"
+
+# Architecture setup
+
+cloud::global::loadbalancer::ips:
+    - "%{hiera('vagrant::ip_prefix')}.1.11"
+    - "%{hiera('vagrant::ip_prefix')}.1.12"
+
+cloud::global::controller_master_name:                          'controller1'
+
+cloud::global::controller1::ip:                                 "%{hiera('vagrant::ip_prefix')}.1.31"
+cloud::global::controller2::ip:                                 "%{hiera('vagrant::ip_prefix')}.1.32"
+
+cloud::global::controller1::rabbitmq:                           "%{hiera('cloud::global::controller1::ip')}:%{hiera('cloud::global::api::ports::rabbitmq')}"
+cloud::global::controller2::rabbitmq:                           "%{hiera('cloud::global::controller2::ip')}:%{hiera('cloud::global::api::ports::rabbitmq')}"
+
+cloud::global::public_api_vip:                                  "%{hiera('vagrant::ip_prefix')}.100.3"
+cloud::global::internal_api_vip:                                "%{hiera('vagrant::ip_prefix')}.1.3"
+cloud::global::admin_api_vip:                                   "%{hiera('cloud::global::internal_api_vip')}"
+
+cloud::global::public_api_proto:                                'https'
+cloud::global::public_api_host:                                 'api.dev.cloud.gwdg.de'
+
+cloud::global::internal_api_proto:                              'http'
+cloud::global::admin_api_proto:                                 'http'
+
+cloud::global::db::root_password:                               's2EQFKBp7I'
+cloud::global::db::services_password:                           "%{hiera('cloud::global::db::root_password')}"
+
+cloud::global::internal_api:                                    "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_vip')}"
+cloud::global::admin_api:                                       "%{hiera('cloud::global::admin_api_proto')}://%{hiera('cloud::global::internal_api_vip')}"
+cloud::global::public_api:                                      "%{hiera('cloud::global::public_api_proto')}://%{hiera('cloud::global::public_api_host')}"
+
+cloud::global::api::ports::nova:                                8774
+cloud::global::api::ports::nova_ec2:                            8773
+cloud::global::api::ports::nova_metadata:                       8775
+
+cloud::global::api::ports::novnc:                               6080
+cloud::global::api::ports::spice:                               6082
+
+cloud::global::api::ports::ceilometer:                          8777
+cloud::global::api::ports::cinder:                              8776
+cloud::global::api::ports::glance:                              9292
+cloud::global::api::ports::glance_registry:                     9191
+cloud::global::api::ports::neutron:                             9696
+
+cloud::global::api::ports::keystone:                            5000
+cloud::global::api::ports::keystone_admin:                      35357
+
+cloud::global::api::ports::heat:                                8004
+cloud::global::api::ports::heat_cfn:                            8000
+cloud::global::api::ports::heat_cloudwatch:                     8003
+
+cloud::global::api::ports::swift:                               8080
+cloud::global::api::ports::trove:                               8779
+
+cloud::global::api::ports::kibana:                              5601
+cloud::global::api::ports::logstash_syslog:                     514
+
+cloud::global::api::ports::rabbitmq:                            5672
+cloud::global::api::ports::rabbitmq_management:                 15672
+
+cloud::global::api::ports::horizon:                             80
+cloud::global::api::ports::horizon_ssl:                         443
+
+cloud::global::api::passwords::nova:                            "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::ceilometer:                      "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::cinder:                          "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::glance:                          "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::heat:                            "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::neutron:                         "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::swift:                           "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::trove:                           "%{hiera('cloud::global::keystone::services_password')}"
+
+cloud::global::keystone::admin_user:                            'admin'
+cloud::global::keystone::admin_token:                           's2EQFKBp7I'
+cloud::global::keystone::services_password:                     's2EQFKBp7I'
+
+cloud::global::web_management::password:                        's2EQFKBp7I'
+
+cloud::global::db::host:                                        "%{hiera('cloud::global::internal_api_vip')}"
+
+cloud::global::rabbit::host:                                    "%{hiera('cloud::global::internal_api_vip')}:%{hiera('cloud::global::api::ports::rabbitmq')}"
+cloud::global::rabbit::password:                                's2EQFKBp7I'
+
+cloud::identity::keystone_master_name:                          "%{hiera('cloud::global::controller_master_name')}"
+cloud::messaging::rabbitmq_master_name:                         "%{hiera('cloud::global::controller_master_name')}"
+
+cloud::global::nova::internal_url:                              "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_vip')}:%{hiera('cloud::global::api::ports::nova')}/v2"
+cloud::global::keystone::internal_url:                          "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_vip')}:%{hiera('cloud::global::api::ports::keystone')}/v2.0"
+
+cloud::database::sql::mysql::mysql_root_password:               "%{hiera('cloud::global::db::root_password')}"
+
+cloud::motd_title:                                              'GWDG IT Operations'
+
+# SELinux stuff only relevant for RedHat
+cloud::selinux_mode:                                            'permissive'
+cloud::selinux_directory:                                       '/usr/share/selinux'
+cloud::selinux_booleans:                                        []
+cloud::selinux_modules:                                         []
+
+# Firewall stuff
+cloud::manage_firewall:                                         false
+cloud::firewall_rules:                                          {}
+cloud::purge_firewall_rules:                                    false
+cloud::firewall_pre_extras:                                     {}
+cloud::firewall_post_extras:                                    {}
+
+# RabbitMQ stuff
+cloud::global::rabbitmq::heartbeat_timeout_threshold:           60
+cloud::global::rabbitmq::heartbeat_rate:                        2
+
+# --------------------------------------------------- Apt setup -------------------------------------------------------
+
+apt::sources:
+
+  'aptly.gwdg':
+    location:               "http://%{hiera('cloud::profile::aptly::vhost')}/testing"
+    repos:                  'main'
+    architecture:           'amd64'
+    include_src:            false
+    pin:                    '1002'
+    key:                    '5B834965F7F7ECCAE8186F7788B9C67706E0E48F'
+    key_source:             '/vagrant/files/aptly/aptly.pub'
+
+  'trusty':
+    location:               'http://ubuntu.mirror.lrz.de/ubuntu'
+    release:                'trusty'
+    repos:                  'main restricted universe multiverse'
+    include_src:            true
+
+  'trusty-updates':
+    location:               'http://ubuntu.mirror.lrz.de/ubuntu'
+    release:                'trusty-updates'
+    repos:                  'main restricted universe multiverse'
+    include_src:            true
+
+  'trusty-security':
+    location:               'http://ubuntu.mirror.lrz.de/ubuntu'
+    release:                'trusty-security'
+    repos:                  'main restricted universe multiverse'
+    include_src:            true
+
+#apt::ppas:
+#  'cloud-archive:juno':
+#    ensure:                 'present'
+
+# ------ Base OpenStack configuration ------
+
+# Log levels
+openstack::verbose:                                             true
+openstack::debug:                                               true
+
+# ------------------------------------------------------- Misc stuff ----------------------------------------------------------
+
+openstacklib::openstackclient::package_ensure:                  "%{hiera('cloud::global::package_ensure')}"
+
+# -------------------------------------------------- Ceph backend setup -------------------------------------------------------
+
+cloud::storage::rbd::pools::glance_key:                         "%{hiera('cloud::global::storage::ceph_glance_key')}"
+cloud::storage::rbd::pools::glance_user:                        "%{hiera('cloud::global::storage::ceph_glance_user')}"
+cloud::storage::rbd::pools::glance_pool:                        "%{hiera('cloud::global::storage::ceph_glance_pool')}"
+
+cloud::storage::rbd::pools::cinder_key:                         "%{hiera('cloud::global::storage::ceph_cinder_key')}"
+cloud::storage::rbd::pools::cinder_user:                        "%{hiera('cloud::global::storage::ceph_cinder_user')}"
+cloud::storage::rbd::pools::cinder_pool:                        "%{hiera('cloud::global::storage::ceph_cinder_pool')}"
+
+cloud::storage::rbd::pools::nova_key:                           "%{hiera('cloud::global::storage::ceph_nova_key')}"
+cloud::storage::rbd::pools::nova_user:                          "%{hiera('cloud::global::storage::ceph_nova_user')}"
+cloud::storage::rbd::pools::nova_pool:                          "%{hiera('cloud::global::storage::ceph_nova_pool')}"
+
+cloud::storage::rbd::pools::cinder_backup_key:                  "%{hiera('cloud::global::storage::ceph_cinder_backup_key')}"
+cloud::storage::rbd::pools::cinder_backup_user:                 "%{hiera('cloud::global::storage::ceph_cinder_backup_user')}"
+cloud::storage::rbd::pools::cinder_backup_pool:                 "%{hiera('cloud::global::storage::ceph_cinder_backup_pool')}"
+
+cloud::storage::rbd::pools::ceph_fsid:                          "%{hiera('cloud::global::storage::ceph_fsid')}"
+
+# -------------------------------------------------- Ceph client setup -------------------------------------------------------
+
+cloud::storage::rbd:enable:                                     false
+
+cloud::storage::rbd::fsid:                                      "%{hiera('cloud::global::storage::ceph_fsid')}"
+
+cloud::storage::rbd::mon_initial_members:
+    - 'ceph-02'
+    - 'ceph-04'
+    - 'ceph-06'
+
+cloud::storage::rbd::mon_host:
+    - '10.108.32.33'
+    - '10.108.32.35'
+    - '10.108.32.37'
+
+cloud::storage::rbd::public_network:                            "%{hiera('cloud::global::storage::ceph_public_network')}"
+cloud::storage::rbd::cluster_network:                           "%{hiera('cloud::global::storage::ceph_cluster_network')}"
+
+# ------------------------------------------------ Database account setup -----------------------------------------------------
+
+cloud::global::db::keystone_user:                               'keystone'
+cloud::global::db::keystone_password:                           "%{hiera('cloud::global::db::services_password')}"
+
+cloud::global::db::cinder_user:                                 'cinder'
+cloud::global::db::cinder_password:                             "%{hiera('cloud::global::db::services_password')}"
+
+cloud::global::db::glance_user:                                 'glance'
+cloud::global::db::glance_password:                             "%{hiera('cloud::global::db::services_password')}"
+
+cloud::global::db::heat_user:                                   'heat'
+cloud::global::db::heat_password:                               "%{hiera('cloud::global::db::services_password')}"
+
+cloud::global::db::nova_user:                                   'nova'
+cloud::global::db::nova_password:                               "%{hiera('cloud::global::db::services_password')}"
+
+cloud::global::db::neutron_user:                                'neutron'
+cloud::global::db::neutron_password:                            "%{hiera('cloud::global::db::services_password')}"
+
+cloud::global::db::trove_user:                                  'trove'
+cloud::global::db::trove_password:                              "%{hiera('cloud::global::db::services_password')}"
+
+# ------------------------------------------------ Auth file setup -----------------------------------------------------
+
+cloud::auth_file::admin_password:                               "%{hiera('cloud::identity::ks_admin_password')}"
+cloud::auth_file::controller_node:                              "%{hiera('cloud::global::internal_api_vip')}"
+cloud::auth_file::keystone_admin_token:                         "%{hiera('cloud::identity::ks_admin_token')}"
+cloud::auth_file::admin_user:                                   "%{hiera('cloud::global::keystone::admin_user')}"
+cloud::auth_file::admin_tenant:                                 "%{hiera('cloud::identity::ks_admin_tenant')}"
+cloud::auth_file::region_name:                                  "%{hiera('cloud::global::region')}"
+cloud::auth_file::use_no_cache:                                 true
+cloud::auth_file::cinder_endpoint_type:                         'publicURL'
+cloud::auth_file::glance_endpoint_type:                         'publicURL'
+cloud::auth_file::keystone_endpoint_type:                       'publicURL'
+cloud::auth_file::nova_endpoint_type:                           'publicURL'
+cloud::auth_file::neutron_endpoint_type:                        'publicURL'
+
+# ------------------------------------------------ Logging server setup --------------------------------------------------
+
+cloud::logging::server::kibana_bind_ip:                         "%{hiera('vagrant::ip_prefix')}.1.14" 
+cloud::logging::server::kibana_port:                            "%{hiera('cloud::global::api::ports::kibana')}"
+cloud::logging::server::logstash_syslog_bind_ip:                "%{hiera('vagrant::ip_prefix')}.1.14" 
+cloud::logging::server::logstash_syslog_port:                   "%{hiera('cloud::global::api::ports::logstash_syslog')}"
+
+# ---------------------------------------------------- Memcached setup -----------------------------------------------------
+
+# Memcached
+cloud::database::nosql::memcached::listen_ip:                   '127.0.0.1'
+cloud::database::nosql::memcached::firewall_settings:           {}
+
+
+# ------------------------------------------------- MongoDB (mongos) setup -----------------------------------------------------
+
+# Direct module configuration
+
+mongodb::globals::manage_package_repo:                          true
+mongodb::globals::version:                                      '2.6.11'
+
+mongodb::server::verbose:                                       true
+mongodb::server::replset:                                       'ceilometer'
+#::mongodb::server::bind_ip:                                     '127.0.0.1'
+#mongodb::replset::sets:
+#    ceilometer:
+#        members:
+#            - "%{hiera('vagrant::ip_prefix')}.1.71:27017"
+#            - "%{hiera('vagrant::ip_prefix')}.1.72:27017"
+#            - "%{hiera('vagrant::ip_prefix')}.1.73:27017"
+
+# Use just a replica set for now...
+#cloud::database::nosql::mongodb::mongos::enable:                true
+#cloud::database::nosql::mongodb::mongos::shards:                {}
+#cloud::database::nosql::mongodb::mongos::mongos_port:           '27017'
+#cloud::database::nosql::mongodb::mongos::firewall_settings:     {}
+
+# ------------------------------------------------- MongoDB (mongod) setup -----------------------------------------------------
+
+#cloud::database::nosql::mongodb::mongod::enable:                true
+#cloud::database::nosql::mongodb::mongod::replset:
+#    ceilometer:
+#        members:
+#            - "%{hiera('vagrant::ip_prefix')}.1.71:27017"
+#            - "%{hiera('vagrant::ip_prefix')}.1.72:27017"
+#            - "%{hiera('vagrant::ip_prefix')}.1.73:27017"
+
+#cloud::database::nosql::mongodb::mongod::mongod_port:           '27017'
+#cloud::database::nosql::mongodb::mongod::firewall_settings:     {}
+
+# ----------------------------------------------------  RabbitMQ setup -----------------------------------------------------
+
+rabbitmq::repos_ensure:                                         false
+rabbitmq::tcp_keepalive:                                        false
+rabbitmq::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
+
+cloud::messaging::erlang_cookie:                                'devCW2bWgop8hdwJ8TEz'
+cloud::messaging::cluster_node_type:                            'disc'
+cloud::messaging::rabbit_names:
+    - 'controller1'
+    - 'controller2'
+
+cloud::messaging::rabbit_password:                              "%{hiera('cloud::global::rabbit::password')}"
+cloud::messaging::haproxy_binding:                              true
+cloud::messaging::rabbitmq_port:                                "%{hiera('cloud::global::api::ports::rabbitmq')}"
+cloud::messaging::rabbitmq_management_port:                     "%{hiera('cloud::global::api::ports::rabbitmq_management')}"
+cloud::messaging::firewall_settings:                            {}
+
+# ----------------------------------------------------- Keystone setup -----------------------------------------------------
+
+# Keystone base module configuration
+keystone::admin_workers:                                        "%{hiera('cloud::global::workers')}"
+keystone::public_workers:                                       "%{hiera('cloud::global::workers')}"
+
+keystone::rabbit_heartbeat_timeout_threshold:                   "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
+keystone::rabbit_heartbeat_rate:                                "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+#keystone::default_domain:                                       'default'
+
+keystone::compute_port:                                         "%{hiera('cloud::global::api::ports::nova')}"
+keystone::public_port:                                          "%{hiera('cloud::global::api::ports::keystone')}"
+keystone::admin_port:                                           "%{hiera('cloud::global::api::ports::keystone_admin')}"
+
+#cloud::identity::api_eth:                                       "%{hiera('cloud::global::internal_api_vip')}"
+cloud::identity::region:                                        'RegionOne'
+cloud::identity::verbose:                                       true
+cloud::identity::debug:                                         true
+cloud::identity::log_facility:                                  'LOG_LOCAL6'
+cloud::identity::use_syslog:                                    true
+cloud::identity::ks_token_expiration:                           '3600'
+cloud::identity::token_driver:                                  'keystone.token.persistence.backends.sql.Token'
+cloud::identity::firewall_settings:                             {}
+
+cloud::identity::swift_enabled:                                 false
+cloud::identity::cinder_enabled:                                true
+cloud::identity::trove_enabled:                                 false
+
+cloud::identity::identity_roles_addons:
+    - 'SwiftOperator'
+    - 'ResellerAdmin'
+
+cloud::identity::keystone_db_host:                              "%{hiera('cloud::global::db::host')}"
+cloud::identity::keystone_db_user:                              'keystone'
+cloud::identity::keystone_db_password:                          "%{hiera('cloud::global::db::services_password')}"
+
+cloud::identity::memcache_servers:
+    - "%{hiera('cloud::global::controller1::ip')}:11211"
+    - "%{hiera('cloud::global::controller2::ip')}:11211"
+
+cloud::identity::ks_admin_email:                                'cloud@gwdg.de'
+cloud::identity::ks_admin_password:                             "%{hiera('cloud::global::keystone::services_password')}"
+cloud::identity::ks_admin_tenant:                               'admin'
+cloud::identity::ks_admin_token:                                "%{hiera('cloud::global::keystone::admin_token')}"
+
+cloud::identity::ks_keystone_public_port:                       "%{hiera('cloud::global::api::ports::keystone')}"
+cloud::identity::ks_keystone_admin_port:                        "%{hiera('cloud::global::api::ports::keystone_admin')}"
+
+cloud::identity::ceilometer_public_url:                         "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::ceilometer')}"
+cloud::identity::ceilometer_internal_url:                       "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::ceilometer')}"
+cloud::identity::ceilometer_admin_url:                          "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::ceilometer')}"
+
+cloud::identity::ceilometer_password:                           "%{hiera('cloud::global::api::passwords::ceilometer')}"
+
+cloud::identity::cinder_v1_public_url:                          "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::cinder')}/v1/%(tenant_id)s"
+cloud::identity::cinder_v1_internal_url:                        "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::cinder')}/v1/%(tenant_id)s"
+cloud::identity::cinder_v1_admin_url:                           "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::cinder')}/v1/%(tenant_id)s"
+
+cloud::identity::cinder_v2_public_url:                          "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::cinder')}/v2/%(tenant_id)s"
+cloud::identity::cinder_v2_internal_url:                        "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::cinder')}/v2/%(tenant_id)s"
+cloud::identity::cinder_v2_admin_url:                           "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::cinder')}/v2/%(tenant_id)s"                                       
+
+cloud::identity::cinder_password:                               "%{hiera('cloud::global::api::passwords::cinder')}"
+
+cloud::identity::glance_public_url:                             "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::glance')}"
+cloud::identity::glance_internal_url:                           "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::glance')}"
+cloud::identity::glance_admin_url:                              "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::glance')}"
+
+cloud::identity::glance_password:                               "%{hiera('cloud::global::api::passwords::glance')}"
+
+cloud::identity::heat_public_url:                               "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::heat')}/v1/%(tenant_id)s"
+cloud::identity::heat_internal_url:                             "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::heat')}/v1/%(tenant_id)s"
+cloud::identity::heat_admin_url:                                "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::heat')}/v1/%(tenant_id)s"
+
+cloud::identity::heat_cfn_public_url:                           "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::heat_cfn')}/v1"
+cloud::identity::heat_cfn_internal_url:                         "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::heat_cfn')}/v1"
+cloud::identity::heat_cfn_admin_url:                            "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::heat_cfn')}/v1"
+
+cloud::identity::heat_password:                                 "%{hiera('cloud::global::api::passwords::heat')}"
+
+cloud::identity::keystone_public_url:                           "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::keystone')}"
+cloud::identity::keystone_internal_url:                         "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::keystone')}"
+cloud::identity::keystone_admin_url:                            "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::keystone_admin')}"
+
+cloud::identity::neutron_public_url:                            "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::neutron')}"
+cloud::identity::neutron_internal_url:                          "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::neutron')}"
+cloud::identity::neutron_admin_url:                             "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::neutron')}"
+
+cloud::identity::neutron_password:                              "%{hiera('cloud::global::api::passwords::neutron')}"
+
+cloud::identity::nova_v2_public_url:                            "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::nova')}/v2/%(tenant_id)s"
+cloud::identity::nova_v2_internal_url:                          "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::nova')}/v2/%(tenant_id)s"
+cloud::identity::nova_v2_admin_url:                             "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::nova')}/v2/%(tenant_id)s"
+
+cloud::identity::nova_v3_public_url:                            "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::nova')}/v3"
+cloud::identity::nova_v3_internal_url:                          "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::nova')}/v3"
+cloud::identity::nova_v3_admin_url:                             "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::nova')}/v3"
+
+cloud::identity::nova_ec2_public_url:                           "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::nova_ec2')}/services/Cloud"
+cloud::identity::nova_ec2_internal_url:                         "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::nova_ec2')}/services/Cloud"
+cloud::identity::nova_ec2_admin_url:                            "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::nova_ec2')}/services/Admin"
+
+cloud::identity::nova_password:                                 "%{hiera('cloud::global::api::passwords::nova')}"
+
+cloud::identity::swift_public_url:                              "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::swift')}/v1/KEY_$(tenant_id)s"
+cloud::identity::swift_internal_url:                            "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::swift')/v1/KEY_$(tenant_id)s}"
+cloud::identity::swift_admin_url:                               "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::swift')}/v1"
+
+cloud::identity::ks_swift_dispersion_password:                  's2EQFKBp7I'
+cloud::identity::swift_password:                                "%{hiera('cloud::global::api::passwords::swift')}"
+
+cloud::identity::trove_public_url:                              "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::trove')}/v1.0/%(tenant_id)s"
+cloud::identity::trove_internal_url:                            "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::trove')}/v1.0/%(tenant_id)s"
+cloud::identity::trove_admin_url:                               "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::trove')}/v1.0/%(tenant_id)s"
+
+cloud::identity::trove_password:                                "%{hiera('cloud::global::api::passwords::trove')}"
+
+
+# ----------------------------------------------------- Glance registry setup -----------------------------------------------------
+
+# Glance base module configuration
+glance::registry::database_idle_timeout:                        '240'
+glance::registry::workers:                                      "%{hiera('cloud::global::workers')}"  
+
+glance::rabbit_heartbeat_timeout_threshold:                     "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
+glance::rabbit_heartbeat_rate:                                  "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+cloud::image::registry::glance_db_host:                         "%{hiera('cloud::global::db::host')}"
+cloud::image::registry::glance_db_user:                         "%{hiera('cloud::global::db::glance_user')}"
+cloud::image::registry::glance_db_password:                     "%{hiera('cloud::global::db::glance_password')}"
+
+cloud::image::registry::ks_keystone_internal_host:              "%{hiera('cloud::global::internal_api_vip')}"
+cloud::image::registry::ks_keystone_internal_proto:             "%{hiera('cloud::global::internal_api_proto')}"
+
+cloud::image::registry::ks_glance_internal_host:                "%{hiera('cloud::global::internal_api_vip')}"
+cloud::image::registry::ks_glance_registry_internal_port:       "%{hiera('cloud::global::api::ports::glance_registry')}"
+cloud::image::registry::ks_glance_password:                     "%{hiera('cloud::global::api::passwords::glance')}"
+
+#cloud::image::registry::api_eth:                                '127.0.0.1'
+cloud::image::registry::verbose:                                true
+cloud::image::registry::debug:                                  true
+cloud::image::registry::log_facility:                           'LOG_LOCAL1'
+cloud::image::registry::use_syslog:                             true
+cloud::image::registry::firewall_settings:                      {}
+
+# --------------------------------------------------------- Glance API setup -----------------------------------------------------
+
+# Set timeout directly in base module
+glance::api::database_idle_timeout:                             '240'
+glance::api::workers:                                           "%{hiera('cloud::global::workers')}"
+
+cloud::image::api::glance_db_host:                              "%{hiera('cloud::global::db::host')}"
+cloud::image::api::glance_db_user:                              "%{hiera('cloud::global::db::glance_user')}"
+cloud::image::api::glance_db_password:                          "%{hiera('cloud::global::db::glance_password')}"
+
+cloud::image::api::ks_keystone_internal_host:                   "%{hiera('cloud::global::internal_api_vip')}"
+cloud::image::api::ks_keystone_internal_proto:                  "%{hiera('cloud::global::internal_api_proto')}"
+
+cloud::image::api::ks_glance_internal_host:                     "%{hiera('cloud::global::internal_api_vip')}"
+cloud::image::api::ks_glance_api_internal_port:                 "%{hiera('cloud::global::api::ports::glance')}"
+cloud::image::api::ks_glance_registry_internal_port:            "%{hiera('cloud::global::api::ports::glance_registry')}"
+cloud::image::api::ks_glance_registry_internal_proto:           "%{hiera('cloud::global::internal_api_proto')}"
+cloud::image::api::ks_glance_password:                          "%{hiera('cloud::global::api::passwords::glance')}"
+
+cloud::image::api::rabbit_password:                             "%{hiera('cloud::global::rabbit::password')}"
+cloud::image::api::rabbit_host:                                 "%{hiera('cloud::global::rabbit::host')}"
+
+#cloud::image::api::api_eth:                                     '127.0.0.1'
+cloud::image::api::openstack_vip:                               "%{hiera('cloud::global::internal_api_vip')}"
+cloud::image::api::glance_rbd_pool:                             'images'
+cloud::image::api::glance_rbd_user:                             'glance'
+cloud::image::api::verbose:                                     true
+cloud::image::api::debug:                                       true
+cloud::image::api::log_facility:                                'LOG_LOCAL1'
+cloud::image::api::use_syslog:                                  true
+cloud::image::api::backend:                                     'nfs'
+cloud::image::api::known_stores:                                ['file', 'rbd', 'http']
+cloud::image::api::filesystem_store_datadir:                    '/var/lib/glance/images/'
+cloud::image::api::nfs_server:                                  "%{hiera('cloud::global::storage::nfs_server')}"
+cloud::image::api::nfs_share:                                   "%{hiera('cloud::global::storage::nfs_share')}"
+cloud::image::api::nfs_options:                                 "%{hiera('cloud::global::storage::nfs_options')}"
+cloud::image::api::pipeline:                                    'keystone'
+cloud::image::api::firewall_settings:                           {}
+cloud::image::api::container_formats:                           'ami,ari,aki,bare,ovf,ova,docker'
+
+
+# ----------------------------------------------------- Cinder basic setup -----------------------------------------------------
+
+# Cinder base module configuration
+
+# Set idle_timeout to < 300 secs to prevent 'MySQL server has gone away' errors
+cinder::database_idle_timeout:                                  '240'
+cinder::database_min_pool_size:                                 '1'
+cinder::database_max_pool_size:
+cinder::database_max_retries:                                   '10'
+cinder::database_retry_interval:                                '10'
+cinder::database_max_overflow:
+
+cinder::rabbit_heartbeat_timeout_threshold:                     "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
+cinder::rabbit_heartbeat_rate:                                  "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+cloud::volume::cinder_db_host:                                  "%{hiera('cloud::global::db::host')}"
+cloud::volume::cinder_db_user:                                  "%{hiera('cloud::global::db::cinder_user')}"
+cloud::volume::cinder_db_password:                              "%{hiera('cloud::global::db::cinder_password')}"
+
+cloud::volume::rabbit_hosts:
+    - "%{hiera('cloud::global::controller1::rabbitmq')}"
+    - "%{hiera('cloud::global::controller2::rabbitmq')}"
+
+cloud::volume::rabbit_password:                                 "%{hiera('cloud::global::rabbit::password')}"
+
+cloud::volume::verbose:                                         true
+cloud::volume::debug:                                           true
+cloud::volume::log_facility:                                    'LOG_LOCAL5'
+cloud::volume::storage_availability_zone:                       'nova'
+cloud::volume::use_syslog:                                      true
+
+# ----------------------------------------------------- Cinder API setup -----------------------------------------------------
+
+cinder::api::service_workers:                                   "%{hiera('cloud::global::workers')}"
+cinder::api::nova_catalog_info:                                 'conpute:nova:internalURL'
+
+cloud::volume::api::default_volume_type:                        'standard'
+
+cloud::volume::api::ks_cinder_internal_port:                    "%{hiera('cloud::global::api::ports::cinder')}"
+cloud::volume::api::ks_cinder_password:                         "%{hiera('cloud::global::api::passwords::cinder')}"
+
+cloud::volume::api::ks_keystone_internal_host:                  "%{hiera('cloud::global::internal_api_vip')}"
+cloud::volume::api::ks_keystone_internal_proto:                 "%{hiera('cloud::global::internal_api_proto')}"
+
+cloud::volume::api::ks_glance_internal_host:                    "%{hiera('cloud::global::internal_api_vip')}"
+cloud::volume::api::ks_glance_api_internal_port:                "%{hiera('cloud::global::api::ports::glance')}"
+cloud::volume::api::ks_glance_internal_proto:                   "%{hiera('cloud::global::internal_api_proto')}"
+
+#cloud::volume::api::api_eth:                                    '127.0.0.1'
+cloud::volume::api::firewall_settings:                          {}
+
+# ---------------------------------------------------- Cinder storage setup -----------------------------------------------------
+
+cloud::volume::storage::cinder_backends:
+    nfs:
+        standard:
+#            volume_backend_name:        
+            nfs_servers:
+                - "%{hiera('cloud::global::storage::nfs_server')}:%{hiera('cloud::global::storage::nfs_share')}/volumes"
+            nfs_mount_options:                                  "%{hiera('cloud::global::storage::nfs_options')}"
+#            nfs_disk_util:
+            nfs_sparsed_volumes:                                true
+#            nfs_mount_point_base:
+            nfs_shares_config:                                  '/etc/cinder/shares.conf'
+            nfs_used_ratio:                                     '0.95'
+            nfs_oversub_ratio:                                  '1.0'
+            qos:
+                frontend:
+                    total_bytes_sec:
+                        value:                                  '100000000'
+                    read_bytes_sec:
+                        value:                                  '100000000'
+                    write_bytes_sec:
+                        value:                                  '100000000'
+                    total_iops_sec: 
+                        value:                                  '100'
+                    read_iops_sec:
+                        value:                                  '100'
+                    write_iops_sec:
+                        value:                                  '100'
+
+cloud::volume::storage::ks_keystone_internal_proto:             "%{hiera('cloud::global::internal_api_proto')}"
+cloud::volume::storage::ks_keystone_internal_port:              "%{hiera('cloud::global::api::ports::keystone')}"
+cloud::volume::storage::ks_keystone_internal_host:              "%{hiera('cloud::global::internal_api_vip')}"
+cloud::volume::storage::ks_cinder_password:                     "%{hiera('cloud::global::api::passwords::cinder')}"
+
+cloud::volume::storage::cinder_rbd_pool:                        'volumes'
+cloud::volume::storage::cinder_rbd_user:                        'cinder'
+#cloud::volume::storage::cinder_rbd_secret_uuid:                 undef
+cloud::volume::storage::cinder_rbd_conf:                        '/etc/ceph/ceph.conf'
+cloud::volume::storage::cinder_rbd_flatten_volume_from_snapshot:    false
+cloud::volume::storage::cinder_rbd_max_clone_depth:             '5'
+
+cloud::volume::storage::ks_glance_internal_host:                "%{hiera('cloud::volume::api::ks_glance_internal_host')}"
+cloud::volume::storage::ks_glance_api_internal_port:            "%{hiera('cloud::volume::api::ks_glance_api_internal_port')}"
+cloud::volume::storage::ks_glance_internal_proto:               "%{hiera('cloud::volume::api::ks_glance_internal_proto')}"
+
+# ----------------------------------------------------- Nova basic setup -----------------------------------------------------
+
+# Nova base module configuration
+
+nova::db::slave_connection:
+# Set idle_timeout to < 300 secs to prevent 'MySQL server has gone away' errors
+nova::db::database_idle_timeout:                                '240'
+
+nova::rabbit_heartbeat_timeout_threshold:                       "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
+nova::rabbit_heartbeat_rate:                                    "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+cloud::compute::nova_db_host:                                   "%{hiera('cloud::global::db::host')}"
+cloud::compute::nova_db_use_slave:                              false
+cloud::compute::nova_db_user:                                   "%{hiera('cloud::global::db::nova_user')}"
+cloud::compute::nova_db_password:                               "%{hiera('cloud::global::db::nova_password')}"
+
+cloud::compute::rabbit_hosts:
+    - "%{hiera('cloud::global::controller1::rabbitmq')}"
+    - "%{hiera('cloud::global::controller2::rabbitmq')}"
+
+cloud::compute::rabbit_password:                                "%{hiera('cloud::global::rabbit::password')}"
+
+cloud::compute::ks_glance_internal_host:                        "%{hiera('cloud::global::internal_api_vip')}"
+cloud::compute::ks_glance_internal_proto:                       "%{hiera('cloud::global::internal_api_proto')}"
+cloud::compute::glance_api_port:                                "%{hiera('cloud::global::api::ports::glance')}"
+
+cloud::compute::neutron_endpoint:                               "%{hiera('cloud::global::internal_api_vip')}"
+cloud::compute::neutron_protocol:                               "%{hiera('cloud::global::internal_api_proto')}"
+cloud::compute::neutron_password:                               "%{hiera('cloud::global::api::passwords::neutron')}"
+cloud::compute::neutron_region_name:                            "%{hiera('cloud::global::region')}"
+
+cloud::compute::verbose:                                        true
+cloud::compute::debug:                                          true
+cloud::compute::use_syslog:                                     true
+cloud::compute::log_facility:                                   'LOG_LOCAL0'
+cloud::compute::memcache_servers:
+    - "%{hiera('cloud::global::controller1::ip')}:11211"
+    - "%{hiera('cloud::global::controller2::ip')}:11211"
+
+cloud::compute::availability_zone:                              'nova'
+
+# ---------------------------------------------------------- Nova API setup -----------------------------------------------------
+
+nova::api::osapi_compute_workers:                               "%{hiera('cloud::global::workers')}"
+nova::api::ec2_workers:                                         "%{hiera('cloud::global::workers')}"
+nova::api::metadata_workers:                                    "%{hiera('cloud::global::workers')}"
+nova::api::cinder_catalog_info:                                 'volume:cinder:internalURL'
+nova::conductor::workers:                                       "%{hiera('cloud::global::workers')}"
+
+cloud::compute::api::ks_keystone_internal_host:                 "%{hiera('cloud::global::internal_api_vip')}"
+cloud::compute::api::ks_keystone_internal_proto:                "%{hiera('cloud::global::internal_api_proto')}"
+
+cloud::compute::api::ks_nova_password:                          "%{hiera('cloud::global::api::passwords::nova')}"
+cloud::compute::api::neutron_metadata_proxy_shared_secret:      '7iww18GA6m11Cy1Unv91JPUfTJmvFz'
+#cloud::compute::api::api_eth:                                   '127.0.0.1'
+cloud::compute::api::ks_nova_public_port:                       "%{hiera('cloud::global::api::ports::nova')}"
+cloud::compute::api::ks_ec2_public_port:                        "%{hiera('cloud::global::api::ports::nova_ec2')}"
+cloud::compute::api::ks_metadata_public_port:                   "%{hiera('cloud::global::api::ports::nova_metadata')}"
+
+# ------------------------------------------------------- Nova scheduler setup -----------------------------------------------------
+
+cloud::compute::scheduler::scheduler_default_filters:           false
+
+# ------------------------------------------------------ Nova consoleproxy setup -----------------------------------------------------
+
+#cloud::compute::consoleproxy::api_eth:                          '127.0.0.1'
+cloud::compute::consoleproxy::console:                          'novnc'
+cloud::compute::consoleproxy::novnc_port:                       "%{hiera('cloud::global::api::ports::novnc')}"
+cloud::compute::consoleproxy::spice_port:                       "%{hiera('cloud::global::api::ports::spice')}"
+cloud::compute::consoleproxy::firewall_settings:                {}
+
+# ------------------------------------------------------- Neutron basic setup -----------------------------------------------------
+
+# Neutron base module configuration
+
+neutron::rabbit_heartbeat_timeout_threshold:                    "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
+neutron::rabbit_heartbeat_rate:                                 "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+cloud::network::verbose:                                        true
+cloud::network::debug:                                          true
+
+cloud::network::rabbit_hosts:
+    - "%{hiera('cloud::global::controller1::rabbitmq')}"
+    - "%{hiera('cloud::global::controller2::rabbitmq')}"
+
+cloud::network::rabbit_password:                                "%{hiera('cloud::global::rabbit::password')}"
+
+#cloud::network::api_eth:                                        '127.0.0.1'
+cloud::network::use_syslog:                                     true
+cloud::network::log_facility:                                   'LOG_LOCAL2'
+cloud::network::dhcp_lease_duration:                            '120'
+cloud::network::plugin:                                         'ml2'
+cloud::network::service_plugins:
+    - 'neutron.services.metering.metering_plugin.MeteringPlugin'
+    - 'neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'
+
+# ---------------------------------------------------- Neutron controller setup -----------------------------------------------------
+
+# Neutron base module configuration
+
+neutron::server::database_max_retries:                          '10'
+# Set idle_timeout to < 300 secs to prevent 'MySQL server has gone away' errors
+neutron::server::database_idle_timeout:                         '240'
+neutron::server::database_retry_interval:                       '10'
+neutron::server::database_min_pool_size:                        '1'
+neutron::server::database_max_pool_size:                        '10'
+neutron::server::database_max_overflow:                         '20'
+
+neutron::server::api_workers:                                   "%{hiera('cloud::global::workers')}"
+neutron::server::rpc_workers:                                   "%{hiera('cloud::global::workers')}"
+neutron::server::agent_down_time:                               '75'
+
+cloud::network::controller::neutron_db_host:                    "%{hiera('cloud::global::db::host')}"
+cloud::network::controller::neutron_db_user:                    "%{hiera('cloud::global::db::neutron_user')}"
+cloud::network::controller::neutron_db_password:                "%{hiera('cloud::global::db::neutron_password')}"
+
+cloud::network::controller::ks_neutron_password:                "%{hiera('cloud::global::api::passwords::neutron')}"
+cloud::network::controller::ks_keystone_admin_host:             "%{hiera('cloud::global::admin_api_vip')}"
+cloud::network::controller::ks_keystone_admin_proto:            "%{hiera('cloud::global::admin_api_proto')}"
+cloud::network::controller::ks_keystone_public_port:            "%{hiera('cloud::global::api::ports::keystone')}"
+cloud::network::controller::ks_neutron_public_port:             "%{hiera('cloud::global::api::ports::neutron')}"
+cloud::network::controller::ks_admin_tenant:                    'admin'
+
+#cloud::network::controller::api_eth:                            '127.0.0.1'
+cloud::network::controller::nova_url:                           "%{hiera('cloud::global::nova::internal_url')}"
+cloud::network::controller::nova_admin_auth_url:                "%{hiera('cloud::global::keystone::internal_url')}"
+cloud::network::controller::nova_admin_username:                'nova'
+cloud::network::controller::nova_admin_tenant_name:             'services'
+cloud::network::controller::nova_admin_password:                "%{hiera('cloud::global::api::passwords::nova')}"
+cloud::network::controller::nova_region_name:                   "%{hiera('cloud::global::region')}"
+
+cloud::network::controller::manage_ext_network:                 false
+cloud::network::controller::firewall_settings:                  {}
+
+cloud::network::controller::flat_networks:
+    - 'public'
+
+cloud::network::controller::tenant_network_types:
+    - 'vxlan'
+
+cloud::network::controller::type_drivers:
+    - 'vxlan'
+    - 'vlan'
+    - 'flat'
+
+cloud::network::controller::provider_vlan_ranges:
+    - 'physnet1:1000:2999'
+
+cloud::network::controller::plugin:                             'ml2'
+
+cloud::network::controller::mechanism_drivers:
+    - 'linuxbridge'
+    - 'openvswitch'
+    - 'l2population'
+
+cloud::network::controller::l3_ha:                              false
+cloud::network::controller::router_distributed:                 true
+
+# only needed by cisco n1kv plugin
+cloud::network::controller::n1kv_vsm_ip:                        '127.0.0.1'
+cloud::network::controller::n1kv_vsm_password:                  'secrete'
+cloud::network::controller::ks_keystone_admin_port:             "%{hiera('cloud::global::api::ports::keystone_admin')}"
+
+# only needed by ml2 plugin
+cloud::network::controller::tunnel_id_ranges:
+    - '32769:65536'
+
+cloud::network::controller::vni_ranges:
+    - '65537:131071'
+
+# ---------------------------------------------------- Nova compute setup -----------------------------------------------------
+
+# Set vncproxy_base_ur directly
+nova::vncproxy::common::vncproxy_base_url:                      "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::novnc')}/vnc_auto.html"
+
+cloud::compute::hypervisor::libvirt_virt_type:                  "%{hiera('cloud::global::hypervisor')}"
+
+cloud::compute::hypervisor::nova_ssh_private_key:               
+cloud::compute::hypervisor::nova_ssh_public_key:                
+cloud::compute::hypervisor::console:                            'novnc'
+
+cloud::compute::hypervisor::manage_tso:                         true
+cloud::compute::hypervisor::nova_shell:                         false
+cloud::compute::hypervisor::firewall_settings:                  {}
+  
+# NFS storage backend
+cloud::compute::hypervisor::nfs_enabled:                        true
+cloud::compute::hypervisor::nfs_server:                         "%{hiera('cloud::global::storage::nfs_server')}"
+cloud::compute::hypervisor::nfs_share:                          "%{hiera('cloud::global::storage::nfs_share')}"
+cloud::compute::hypervisor::nfs_options:                        "%{hiera('cloud::global::storage::nfs_options')}"
+cloud::compute::hypervisor::filesystem_store_datadir:           '/var/lib/nova/instances'
+
+# Ceph storage backend
+cloud::compute::hypervisor::ceph_fsid:                          "%{hiera('cloud::global::storage::ceph_fsid')}"
+cloud::compute::hypervisor::nova_rbd_secret_uuid:               "%{hiera('cloud::global::storage::ceph_fsid')}"
+cloud::compute::hypervisor::cinder_rbd_user:                    "%{hiera('cloud::global::storage::ceph_cinder_user')}"
+cloud::compute::hypervisor::cinder_rbd_key:                     "%{hiera('cloud::global::storage::ceph_cinder_key')}"
+cloud::compute::hypervisor::nova_rbd_pool:                      "%{hiera('cloud::global::storage::ceph_nova_pool')}"
+cloud::compute::hypervisor::vm_rbd:                             false
+cloud::compute::hypervisor::volume_rbd:                         false
+
+# --------------------------------------------------- Neutron vswitch setup  -----------------------------------------------------
+
+# Do not use dkms (module already part of kernel)
+vswitch::ovs::dkms_ensure:                                      false
+
+# common
+cloud::network::vswitch::driver:                                'ml2_ovs'
+cloud::network::vswitch::manage_ext_network:                    false
+cloud::network::vswitch::external_int:                          "%{hiera('cloud::global::network::public_interface')}"
+cloud::network::vswitch::external_bridge:                       'br-ex'
+cloud::network::vswitch::firewall_settings:                     {}
+
+# common to ml2
+cloud::network::vswitch::tunnel_types:
+    - 'vxlan'
+
+#cloud::network::vswitch::tunnel_eth:                            '127.0.0.1'
+
+# ml2_ovs
+cloud::network::vswitch::provider_bridge_mappings:
+    - 'public:br-ex'
+
+cloud::network::vswitch::enable_distributed_routing:            true
+
+# n1kv_vem
+cloud::network::vswitch::n1kv_vsm_ip:                           '127.0.0.1'
+cloud::network::vswitch::n1kv_vsm_domain_id:                    '1000'
+cloud::network::vswitch::host_mgmt_intf:                        "%{hiera('cloud::global::network::management_interface')}"
+cloud::network::vswitch::uplink_profile:                        {}
+cloud::network::vswitch::vtep_config:                           {}
+cloud::network::vswitch::node_type:                             'compute'
+cloud::network::vswitch::vteps_in_same_subnet:                  false
+cloud::network::vswitch::n1kv_source:                           ''
+cloud::network::vswitch::n1kv_version:                          'present'
+
+# -------------------------------------------------- Neutron l3 agent setup  -----------------------------------------------------
+
+neutron::agents::l3::periodic_interval:                         '40'
+neutron::agents::l3::periodic_fuzzy_delay:                      '5'
+neutron::agents::l3::router_delete_namespaces:                  'false'
+
+cloud::network::l3::external_int:                               "%{hiera('cloud::global::network::public_interface')}"
+cloud::network::l3::ext_provider_net:                           false
+cloud::network::l3::debug:                                      true
+cloud::network::l3::manage_tso:                                 true
+cloud::network::l3::ha_enabled:                                 false
+cloud::network::l3::ha_vrrp_auth_type:                          'PASS'
+cloud::network::l3::ha_vrrp_auth_password:                      'V3aJoFAppCAaVyih4pWm'
+cloud::network::l3::allow_automatic_l3agent_failover:           true
+cloud::network::l3::agent_mode:                                 'dvr_snat'
+
+# -------------------------------------------------- Neutron dhcp agent setup  -----------------------------------------------------
+
+cloud::network::dhcp::veth_mtu:                                 '1500'
+cloud::network::dhcp::debug:                                    true
+cloud::network::dhcp::dnsmasq_dns_servers:
+    - "%{hiera('cloud::global::dns_server1')}"
+    - "%{hiera('cloud::global::dns_server2')}"
+
+cloud::network::dhcp::firewall_settings:                        {}
+
+# ------------------------------------------------- Neutron metadata agent setup  -----------------------------------------------------
+
+neutron::agents::metadata::metadata_workers:                    "%{hiera('cloud::global::workers')}"
+neutron::agents::metadata::metadata_backlog:                    '4096'
+neutron::agents::metadata::metadata_memory_cache_ttl:           '5'
+
+cloud::network::metadata::enabled:                              true
+cloud::network::metadata::debug:                                true
+
+cloud::network::metadata::ks_neutron_password:                  "%{hiera('cloud::global::api::passwords::neutron')}"
+cloud::network::metadata::neutron_metadata_proxy_shared_secret: "%{hiera('cloud::compute::api::neutron_metadata_proxy_shared_secret')}"
+
+cloud::network::metadata::nova_metadata_server:                 "%{hiera('cloud::global::internal_api_vip')}"
+
+cloud::network::metadata::ks_keystone_admin_proto:              "%{hiera('cloud::global::admin_api_proto')}"
+cloud::network::metadata::ks_keystone_admin_port:               "%{hiera('cloud::global::api::ports::keystone_admin')}"
+cloud::network::metadata::ks_keystone_admin_host:               "%{hiera('cloud::global::admin_api_vip')}"
+
+cloud::network::metadata::auth_region:                          "%{hiera('cloud::global::region')}"
+cloud::network::metadata::ks_nova_internal_proto:               "%{hiera('cloud::global::internal_api_proto')}"
+
+# ------------------------------------------------------- Horizon setup -----------------------------------------------------
+
+# Unused in module
+cloud::dashboard::ks_keystone_internal_host:                    "%{hiera('cloud::global::internal_api_vip')}"
+
+cloud::dashboard::secret_key:                                   '0U53qTFbEDhGeicS36Ej'
+cloud::dashboard::horizon_port:                                 "%{hiera('cloud::global::api::ports::horizon')}"
+cloud::dashboard::horizon_ssl_port:                             "%{hiera('cloud::global::api::ports::horizon_ssl')}"
+
+#cloud::dashboard::servername:                                   "%{::fqdn}"
+cloud::dashboard::servername:                                   "horizon.dev.cloud.gwdg.de"
+
+#cloud::dashboard::api_eth:                                      '127.0.0.1'
+
+cloud::dashboard::keystone_host:                                "%{hiera('cloud::global::internal_api_vip')}"
+cloud::dashboard::keystone_proto:                               "%{hiera('cloud::global::internal_api_proto')}"
+cloud::dashboard::keystone_port:                                "%{hiera('cloud::global::api::ports::keystone')}"
+
+cloud::dashboard::debug:                                        true
+
+# Deploy horizon in apache with ssl (needs certs set)
+cloud::dashboard::listen_ssl:                                   false
+#cloud::dashboard::horizon_cert:                                 undef
+#cloud::dashboard::horizon_key:                                  undef
+#cloud::dashboard::horizon_ca:                                   undef
+
+# Useful / necessary with haproxy ssl termination
+cloud::dashboard::ssl_forward:                                  true
+
+cloud::dashboard::os_endpoint_type:                             'internalURL'
+#cloud::dashboard::allowed_hosts:                                "%{::fqdn}"
+
+cloud::dashboard::allowed_hosts:                                '*'
+cloud::dashboard::vhost_extra_params:
+    add_listen: false
+
+cloud::dashboard::neutron_extra_options:                        {}
+cloud::dashboard::firewall_settings:                            {}
+
+# ------------------------------------------------------- Heat common setup -----------------------------------------------------
+
+# Heat base module configuration
+
+heat::rabbit_heartbeat_timeout_threshold:                       "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
+heat::rabbit_heartbeat_rate:                                    "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+cloud::orchestration::ks_keystone_internal_host:                "%{hiera('cloud::global::internal_api_vip')}"
+cloud::orchestration::ks_keystone_internal_port:                "%{hiera('cloud::global::api::ports::keystone')}"
+cloud::orchestration::ks_keystone_internal_proto:               "%{hiera('cloud::global::internal_api_proto')}"
+
+cloud::orchestration::ks_keystone_admin_host:                   "%{hiera('cloud::global::admin_api_vip')}"
+cloud::orchestration::ks_keystone_admin_port:                   "%{hiera('cloud::global::api::ports::keystone_admin')}"
+cloud::orchestration::ks_keystone_admin_proto:                  "%{hiera('cloud::global::admin_api_proto')}"
+
+cloud::orchestration::ks_heat_public_host:                      "%{hiera('cloud::global::public_api_host')}"
+cloud::orchestration::ks_heat_public_proto:                     "%{hiera('cloud::global::public_api_proto')}"
+cloud::orchestration::ks_heat_password:                         "%{hiera('cloud::global::api::passwords::heat')}"
+
+cloud::orchestration::heat_db_host:                             "%{hiera('cloud::global::db::host')}"
+cloud::orchestration::heat_db_user:                             "%{hiera('cloud::global::db::heat_user')}"
+cloud::orchestration::heat_db_password:                         "%{hiera('cloud::global::db::heat_password')}"
+
+cloud::orchestration::rabbit_hosts:
+    - "%{hiera('cloud::global::controller1::rabbitmq')}"
+    - "%{hiera('cloud::global::controller2::rabbitmq')}"
+
+cloud::orchestration::rabbit_password:                          "%{hiera('cloud::global::rabbit::password')}"
+
+cloud::orchestration::verbose:                                  true
+cloud::orchestration::debug:                                    true
+cloud::orchestration::use_syslog:                               true
+cloud::orchestration::log_facility:                             'LOG_LOCAL7'
+cloud::orchestration::os_endpoint_type:                         'publicURL'
+
+# --------------------------------------------------------- Heat API setup -----------------------------------------------------
+
+cloud::orchestration::api::ks_heat_internal_port:               "%{hiera('cloud::global::api::ports::heat')}"
+cloud::orchestration::api::ks_heat_cfn_internal_port:           "%{hiera('cloud::global::api::ports::heat_cfn')}"
+cloud::orchestration::api::ks_heat_cloudwatch_internal_port:    "%{hiera('cloud::global::api::ports::heat_cloudwatch')}"
+
+#cloud::orchestration::api::api_eth:                             '127.0.0.1'
+cloud::orchestration::api::workers:                             "%{hiera('cloud::global::workers')}"
+cloud::orchestration::api::firewall_settings:                   {}
+
+# --------------------------------------------------------- Heat engine setup -----------------------------------------------------
+
+heat::engine::configure_delegated_roles:                        false
+
+cloud::orchestration::engine::enabled:                          true
+
+cloud::orchestration::engine::ks_heat_public_host:              "%{hiera('cloud::global::public_api_host')}"
+cloud::orchestration::engine::ks_heat_public_proto:             "%{hiera('cloud::global::public_api_proto')}"
+
+cloud::orchestration::engine::ks_heat_password:                 "%{hiera('cloud::global::api::passwords::heat')}"
+
+cloud::orchestration::engine::ks_heat_cfn_public_port:          "%{hiera('cloud::global::api::ports::heat_cfn')}"
+cloud::orchestration::engine::ks_heat_cloudwatch_public_port:   "%{hiera('cloud::global::api::ports::heat_cloudwatch')}"
+
+cloud::orchestration::engine::auth_encryption_key:              '2rvHxhpcCUEIKcpsXzhuTDcpqKxoKAx2'
+
+# ------------------------------------------------------ Ceilometer common setup -----------------------------------------------------
+
+# Ceilometer base module configuration
+
+ceilometer::rabbit_heartbeat_timeout_threshold:                 "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
+ceilometer::rabbit_heartbeat_rate:                              "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+cloud::telemetry::ceilometer_secret:                            'jbL9fEYqrw2FgN58CtdL'
+
+cloud::telemetry::rabbit_hosts:
+    - "%{hiera('cloud::global::controller1::rabbitmq')}"
+    - "%{hiera('cloud::global::controller2::rabbitmq')}"
+
+cloud::telemetry::rabbit_password:                              "%{hiera('cloud::global::rabbit::password')}" 
+
+cloud::telemetry::ks_keystone_internal_host:                    "%{hiera('cloud::global::internal_api_vip')}"
+cloud::telemetry::ks_keystone_internal_port:                    "%{hiera('cloud::global::api::ports::keystone')}"
+cloud::telemetry::ks_keystone_internal_proto:                   "%{hiera('cloud::global::internal_api_proto')}"
+cloud::telemetry::ks_ceilometer_password:                       "%{hiera('cloud::global::api::passwords::ceilometer')}"
+
+cloud::telemetry::region:                                       "%{hiera('cloud::global::region')}"
+cloud::telemetry::verbose:                                      true
+cloud::telemetry::debug:                                        true
+cloud::telemetry::log_facility:                                 'LOG_LOCAL3'
+cloud::telemetry::use_syslog:                                   true
+cloud::telemetry::os_endpoint_type:                             'publicURL'
+
+# ---------------------------------------------------- Ceilometer API setup ------------------------------------------------------------
+
+cloud::telemetry::api::ks_keystone_internal_host:           "%{hiera('cloud::global::internal_api_vip')}"
+cloud::telemetry::api::ks_keystone_internal_proto:          "%{hiera('cloud::global::internal_api_proto')}"
+cloud::telemetry::api::ks_ceilometer_password:              "%{hiera('cloud::global::api::passwords::ceilometer')}"
+cloud::telemetry::api::replicaset_enabled:                  "%{hiera('cloud::telemetry::collector::replicaset_enabled')}"
+cloud::telemetry::api::firewall_settings:                   {}
+cloud::telemetry::api::mongo_nodes:                         
+    - "mongo1.%{hiera('cloud::site_domain')}:27017"
+    - "mongo2.%{hiera('cloud::site_domain')}:27017"
+    - "mongo3.%{hiera('cloud::site_domain')}:27017"
+
+# ---------------------------------------------------- Ceilometer centralagent setup -----------------------------------------------------
+
+cloud::telemetry::centralagent::enabled:                        true
+cloud::telemetry::centralagent::coordination_url:               
+
+# ----------------------------------------------------- Ceilometer collector setup -----------------------------------------------------
+
+cloud::telemetry::collector::mongo_nodes:
+    - "mongo1.%{hiera('cloud::site_domain')}:27017"
+    - "mongo2.%{hiera('cloud::site_domain')}:27017"
+    - "mongo3.%{hiera('cloud::site_domain')}:27017"
+
+cloud::telemetry::collector::replicaset_enabled:                true
+

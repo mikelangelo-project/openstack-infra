@@ -1,0 +1,57 @@
+#
+---
+
+cloud::database::sql::mysql::allowed_hosts:                     &allowed_hosts
+  - "%{hiera('vagrant::ip_prefix')}.1.11"
+  - "%{hiera('vagrant::ip_prefix')}.1.12"
+
+#cloud::database::sql::mysql::api_eth:                           'eth2'
+cloud::database::sql::mysql::galera_master_name:                'galera1'
+cloud::database::sql::mysql::galera_internal_ips:               
+  - "%{hiera('vagrant::ip_prefix')}.1.21"
+  - "%{hiera('vagrant::ip_prefix')}.1.22"
+
+cloud::database::sql::mysql::galera_gcache:                     '1G'
+
+#cloud::database::sql::mysql::mysql_root_password:               's2EQFKBp7I'
+cloud::database::sql::mysql::mysql_sys_maint_password:          "%{hiera('cloud::global::db::root_password')}"
+cloud::database::sql::mysql::galera_clustercheck_dbuser:        'clustercheckdb'
+cloud::database::sql::mysql::galera_clustercheck_dbpassword:    "%{hiera('cloud::database::sql::mysql::mysql_sys_maint_password')}"
+
+cloud::database::sql::mysql::firewall_settings:                 {}
+
+cloud::database::sql::mysql::keystone_db_host:                  "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::keystone_db_user:                  "%{hiera('cloud::global::db::keystone_user')}"
+cloud::database::sql::mysql::keystone_db_password:              "%{hiera('cloud::global::db::keystone_password')}"
+cloud::database::sql::mysql::keystone_db_allowed_hosts:         *allowed_hosts
+
+cloud::database::sql::mysql::cinder_db_host:                    "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::cinder_db_user:                    "%{hiera('cloud::global::db::cinder_user')}"
+cloud::database::sql::mysql::cinder_db_password:                "%{hiera('cloud::global::db::cinder_password')}"
+cloud::database::sql::mysql::cinder_db_allowed_hosts:           *allowed_hosts
+
+cloud::database::sql::mysql::glance_db_host:                    "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::glance_db_user:                    "%{hiera('cloud::global::db::glance_user')}"
+cloud::database::sql::mysql::glance_db_password:                "%{hiera('cloud::global::db::glance_password')}"
+cloud::database::sql::mysql::glance_db_allowed_hosts:           *allowed_hosts
+
+cloud::database::sql::mysql::heat_db_host:                      "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::heat_db_user:                      "%{hiera('cloud::global::db::heat_user')}"
+cloud::database::sql::mysql::heat_db_password:                  "%{hiera('cloud::global::db::heat_password')}"
+cloud::database::sql::mysql::heat_db_allowed_hosts:             *allowed_hosts
+
+cloud::database::sql::mysql::nova_db_host:                      "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::nova_db_user:                      "%{hiera('cloud::global::db::nova_user')}"
+cloud::database::sql::mysql::nova_db_password:                  "%{hiera('cloud::global::db::nova_password')}"
+cloud::database::sql::mysql::nova_db_allowed_hosts:             *allowed_hosts
+
+cloud::database::sql::mysql::neutron_db_host:                   "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::neutron_db_user:                   "%{hiera('cloud::global::db::neutron_user')}"
+cloud::database::sql::mysql::neutron_db_password:               "%{hiera('cloud::global::db::neutron_password')}"
+cloud::database::sql::mysql::neutron_db_allowed_hosts:          *allowed_hosts
+
+cloud::database::sql::mysql::trove_db_host:                     "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::trove_db_user:                     "%{hiera('cloud::global::db::trove_user')}"
+cloud::database::sql::mysql::trove_db_password:                 "%{hiera('cloud::global::db::trove_password')}"
+cloud::database::sql::mysql::trove_db_allowed_hosts:            *allowed_hosts
+

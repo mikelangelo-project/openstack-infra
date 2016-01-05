@@ -1,0 +1,75 @@
+#
+---
+
+# Do not install nova utilities / libguestfs on controller
+nova::install_utilities:                                        false
+
+#Openstack Package Version
+nova::ensure_package:                                          "%{hiera('cloud::global::package_ensure')}"
+cinder::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
+glance::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
+keystone::package_ensure:                                      "%{hiera('cloud::global::package_ensure')}"
+horizon::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
+neutron::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
+heat::package_ensure:                                          "%{hiera('cloud::global::package_ensure')}"
+
+# Update / create nova db
+cloud::compute:db_sync:                                         true
+
+cloud::database::nosql::memcached::listen_ip:                   "%{hiera('node::management_ip')}"
+
+cloud::messaging::rabbitmq_ip:                                  "%{hiera('node::management_ip')}"
+cloud::identity::api_eth:                                       "%{hiera('node::management_ip')}"
+
+cloud::image::registry::api_eth:                                "%{hiera('node::management_ip')}"
+cloud::image::api::api_eth:                                     "%{hiera('node::management_ip')}"
+
+cloud::volume::api::api_eth:                                    "%{hiera('node::management_ip')}"
+
+cloud::compute::api::api_eth:                                   "%{hiera('node::management_ip')}"
+cloud::compute::consoleproxy::api_eth:                          "%{hiera('node::management_ip')}"
+
+cloud::network::api_eth:                                        "%{hiera('node::management_ip')}"
+cloud::network::controller::api_eth:                            "%{hiera('node::management_ip')}"
+
+# Do not constrain virtual host in apache for Horizon as that makes port forwarding fail
+cloud::dashboard::lb_eth:                                       "%{hiera('node::management_ip')}"
+cloud::dashboard::api_eth:                                      '*'
+
+cloud::orchestration::api::api_eth:                             "%{hiera('node::management_ip')}"
+cloud::telemetry::api::api_eth:                                 "%{hiera('node::management_ip')}"
+
+cloud::groups:
+
+  nova:
+    gid:        150
+
+#  keystone:
+#    gid:        151
+
+  glance:
+    gid:        152
+
+cloud::users:
+
+  nova:
+    gid:        'nova'
+    home:       '/var/lib/nova'
+    shell:      '/bin/false'
+    uid:        '150'
+
+#  keystone:
+#    gid:        'keystone'
+#    home:       '/var/lib/keystone'
+#    uid:        '151'
+
+  glance:
+    gid:        'glance'
+    home:       '/var/lib/glance'
+    shell:      '/bin/false'
+    uid:        '152'
+    before:
+      - Package[glance-registry]
+      - Package[glance-api]
+
+

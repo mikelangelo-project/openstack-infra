@@ -1,0 +1,22 @@
+{% set neutron_runner_timeout     = neutron_runner_timeout or default_runner_timeout %}
+{% set neutron_runner_times       = neutron_runner_times or default_runner_times %}
+{% set neutron_runner_concurrency = neutron_runner_concurrency or default_runner_concurrency %}
+NeutronNetworks.create_and_list_ports:
+  -
+    args:
+      network_create_args: {}
+      port_create_args: {}
+      ports_per_network: 10
+    runner:
+      type: "constant"
+      times: {{neutron_runner_times}}
+      concurrency: {{neutron_runner_concurrency}}
+      timeout: {{neutron_runner_timeout}}
+    context:
+      quotas:
+        neutron:
+          network: -1
+          port: -1
+    sla:
+      failure_rate:
+        max: 0

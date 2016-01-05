@@ -1,0 +1,35 @@
+#
+---
+
+# Vnc / spice proxy (management ip of compute node)
+cloud::compute::hypervisor::server_proxyclient_address:         "%{hiera('node::management_ip')}"
+
+# Update / create nova db only on controller nodes
+cloud::compute:db_sync:                                         false
+
+# Neutron vswitch settings
+cloud::network::vswitch::manage_ext_network:                    false
+cloud::network::vswitch::tunnel_eth:                            "%{hiera('node::overlay_ip')}"
+
+cloud::network::vswitch::firewall_settings:                     {}
+
+# Neutron l3 agent settings
+cloud::network::l3::ext_provider_net:                           false
+cloud::network::l3::agent_mode:                                 'dvr'
+
+cloud::groups:
+
+  nova:
+    gid:        150
+
+cloud::users:
+
+  nova:
+    gid:        'nova'
+    home:       '/var/lib/nova'
+    shell:      '/bin/false'
+    uid:        '150'
+
+# --------------- docker --------------------------
+
+docker::manage_kernel: false

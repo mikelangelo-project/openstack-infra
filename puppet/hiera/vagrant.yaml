@@ -1,0 +1,14 @@
+# OpenStack setup for Liberty / Vagrant
+
+# Vagrant
+vagrant::environment:               1
+vagrant::gateway::address:          '10.0.2.2'
+vagrant::host::address:             '10.108.16.31'
+
+# This will be adapted based on your environment number
+vagrant::ip_prefix:                 "10.%{hiera('vagrant::environment')}"
+vagrant::in_addr_arpa_private:      "1.%{hiera('vagrant::environment')}.10"
+vagrant::in_addr_arpa_public:       "100.%{hiera('vagrant::environment')}.10"
+
+
+

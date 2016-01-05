@@ -1,0 +1,22 @@
+{% set nova_runner_timeout     = nova_runner_timeout or default_runner_timeout %}
+{% set nova_runner_times       = nova_runner_times or default_runner_times %}
+{% set nova_runner_concurrency = nova_runner_concurrency or default_runner_concurrency %}
+{% set nova_args_flavor_name   = nova_args_flavor_name or default_args_flavor_name %}
+{% set nova_args_image_name    = nova_args_image_name or default_args_image_name %}
+NovaServers.boot_and_rebuild_server:
+- args:
+    flavor:
+      name: {{nova_args_flavor_name}}
+    from_image:
+      name: {{nova_args_image_name}}
+    to_image:
+      name: {{nova_args_image_name}}
+  runner:
+    type: "constant"
+    times: {{nova_runner_times}}
+    concurrency: {{nova_runner_concurrency}}
+    timeout: {{nova_runner_timeout}}
+  context: {}
+  sla:
+    failure_rate:
+      max: 0

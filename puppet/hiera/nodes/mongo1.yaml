@@ -1,0 +1,12 @@
+#
+---
+
+# Setup repl. sets only on first node
+mongodb::replset::sets:
+    ceilometer:
+        members:
+            - "mongo1.%{hiera('cloud::site_domain')}:27017"
+            - "mongo2.%{hiera('cloud::site_domain')}:27017"
+            - "mongo3.%{hiera('cloud::site_domain')}:27017"
+
+        initialize_host:    "mongo1.%{hiera('cloud::site_domain')}:27017"

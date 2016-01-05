@@ -1,0 +1,7 @@
+#
+
+cloud::database::sql::mysql::api_eth:                           "%{hiera('node::management_ip')}"
+
+# Must be reachable by haproxy
+cloud::database::sql::mysql::galera_clustercheck_ipaddress:     "%{hiera('node::management_ip')}"
+

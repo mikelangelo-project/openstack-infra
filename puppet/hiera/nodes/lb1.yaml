@@ -1,0 +1,5 @@
+# 
+# Use state = 'BACKUP' + priority + preempt_delay = 30 to make failback transitions smooth (and also work in vagrant)
+#
+---
+cloud::loadbalancer::keepalived_priority:               100

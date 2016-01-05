@@ -1,0 +1,22 @@
+{% set ceilometer_runner_timeout     = ceilometer_runner_timeout or default_runner_timeout %}
+{% set ceilometer_runner_times       = ceilometer_runner_times or default_runner_times %}
+{% set ceilometer_runner_concurrency = ceilometer_runner_concurrency or default_runner_concurrency %}
+CeilometerAlarms.create_alarm:
+ -
+    args:
+      meter_name: "ram_util"
+      threshold: 10.0
+      type: "threshold"
+      statistic: "avg"
+      alarm_actions: ["http://localhost:8776/alarm"]
+      ok_actions: ["http://localhost:8776/ok"]
+      insufficient_data_actions: ["http://localhost:8776/notok"]
+    runner:
+      type: "constant"
+      times: {{ceilometer_runner_times}}
+      concurrency: {{ceilometer_runner_concurrency}}
+      timeout: {{ceilometer_runner_timeout}}
+    context: {}
+    sla:
+      failure_rate:
+        max: 0

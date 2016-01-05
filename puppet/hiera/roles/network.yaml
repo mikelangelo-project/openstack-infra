@@ -1,0 +1,5 @@
+#
+---
+
+cloud::network::vswitch::tunnel_eth:                            "%{hiera('node::overlay_ip')}"
+

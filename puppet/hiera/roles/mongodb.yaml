@@ -1,0 +1,5 @@
+#
+---
+
+mongodb::server::bind_ip:                               "%{hiera('node::management_ip')}"
+

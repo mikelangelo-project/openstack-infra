@@ -1,0 +1,7 @@
+/root/.gnupg/pubring.gpg
+------------------------
+pub   2048R/06E0E48F 2015-03-21
+      Key fingerprint = 5B83 4965 F7F7 ECCA E818  6F77 88B9 C677 06E0 E48F
+uid                  Aptly (Aptly) <aptly@gwdg.de>
+sub   2048R/F54AB9CC 2015-03-21
+

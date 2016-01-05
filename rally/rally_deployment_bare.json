@@ -1,0 +1,23 @@
+{
+    "auth_url": "http://******:5000/v2.0/", 
+    "endpoint_type": "public", 
+    "region_name": "RegionOne", 
+    "type": "ExistingCloud",
+    "admin": {
+        "password": "********", 
+        "tenant_name": "admin", 
+        "username": "admin"
+    },
+    "users": [
+        {
+            "username": "rally_user_1",
+            "password": "********",
+            "tenant_name": "rally_user_1"
+        },
+        {
+            "username": "rally_user_2",
+            "password": "********",
+            "tenant_name": "rally_user_2"
+        }
+    ]
+}

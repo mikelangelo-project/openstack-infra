@@ -1,0 +1,37 @@
+#!/bin/bash
+OPENRC=$1
+DOCKER_IMAGE=$2
+OS_DOCKER_IMAGE=os-"$DOCKER_IMAGE"_$(uuidgen)
+
+echo "Usage os-docker-transfere <openrc file> <docker image>"
+echo 
+
+if [ ! -s "$OPENRC" ]; then
+  echo "Missing openrc file"
+  exit
+fi
+echo "Use openrc: $OPENRC"
+
+if [[ ! $(docker images -q $DOCKER_IMAGE) ]]; then 
+  echo "Missing image in local docker registry !"
+  exit
+fi
+
+echo "Use Docker Image: $DOCKER_IMAGE"
+echo 
+source $OPENRC
+
+echo "RENAME IMAGE to $OS_DOCKER_IMAGE for Openstack"
+docker tag "$DOCKER_IMAGE" $OS_DOCKER_IMAGE
+
+echo "SAVE IMAGE temporarily"
+docker save "$OS_DOCKER_IMAGE" > /tmp/$OS_DOCKER_IMAGE
+
+echo "START UPLOAD"
+glance image-create --is-public false --container-format docker --disk-format raw --file /tmp/$OS_DOCKER_IMAGE --name $OS_DOCKER_IMAGE --property hypervisor_type=docker --progress
+
+echo "CLEAN"
+docker rmi $OS_DOCKER_IMAGE
+rm -f /tmp/$OS_DOCKER_IMAGE
+echo "FINISH TRANSFERE $DOCKER_IMAGE"
+echo "OPENSTACK IMAGE NAME: $OS_DOCKER_IMAGE" 
