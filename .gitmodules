@@ -6,3 +6,19 @@ url=https://github.com/gwdg/puppetlabs-apache.git
 	path = puppet/modules/apt
 	url = https://github.com/gwdg/puppetlabs-apt.git
 	branch = liberty
+[submodule "puppet/modules/aptly"]
+	path = puppet/modules/aptly
+	url = https://github.com/gwdg/puppet-aptly.git
+	branch = liberty
+[submodule "puppet/modules/ceilometer"]
+	path = puppet/modules/ceilometer
+	url = https://github.com/gwdg/puppet-ceilometer.git
+	branch = liberty
+[submodule "puppet/modules/ceph"]
+	path = puppet/modules/ceph
+	url = https://github.com/gwdg/puppet-ceph.git
+	branch = liberty
+[submodule "puppet/modules/cinder"]
+	path = puppet/modules/cinder
+	url = https://github.com/gwdg/puppet-cinder.git
+	branch = liberty
