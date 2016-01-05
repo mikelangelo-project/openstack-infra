@@ -1,0 +1,8 @@
+[submodule "apt"]
+	path = apt
+	url = https://github.com/gwdg/puppetlabs-apt.git
+	branch = liberty
+[submodule "puppet/modules/apache"]
+	path = puppet/modules/apache
+	url = https://msrba@github.com/gwdg/puppetlabs-apache.git
+	branch = liberty
