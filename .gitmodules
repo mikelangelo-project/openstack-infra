@@ -126,3 +126,10 @@ url=https://github.com/gwdg/puppet-dns.git
 	path = puppet/modules/ntp
 	url = https://github.com/gwdg/puppetlabs-ntp.git
 	branch = liberty
+[submodule "puppet/modules/openstacklib"]
+	path = puppet/modules/openstacklib
+	url = https://github.com/gwdg/puppet-openstacklib.git
+[submodule "puppet/modules/pacemaker"]
+	path = puppet/modules/pacemaker
+	url = https://github.com/gwdg/puppet-pacemaker.git
+	branch = liberty
