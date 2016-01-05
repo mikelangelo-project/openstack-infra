@@ -94,3 +94,35 @@ url=https://github.com/gwdg/puppet-dns.git
 	path = puppet/modules/inifile
 	url = https://github.com/gwdg/puppetlabs-inifile.git
 	branch = liberty
+[submodule "puppet/modules/magnum"]
+	path = puppet/modules/magnum
+	url = https://github.com/gwdg/puppet-magnum.git
+	branch = liberty
+[submodule "puppet/modules/memcached"]
+	path = puppet/modules/memcached
+	url = https://github.com/gwdg/puppet-memcached.git
+	branch = liberty
+[submodule "puppet/modules/mongodb"]
+	path = puppet/modules/mongodb
+	url = https://github.com/gwdg/puppetlabs-mongodb.git
+	branch = liberty
+[submodule "puppet/modules/mysql"]
+	path = puppet/modules/mysql
+	url = https://github.com/gwdg/puppetlabs-mysql.git
+	branch = liberty
+[submodule "puppet/modules/neutron"]
+	path = puppet/modules/neutron
+	url = https://github.com/gwdg/puppet-neutron.git
+	branch = liberty
+[submodule "puppet/modules/nfs"]
+	path = puppet/modules/nfs
+	url = https://github.com/gwdg/puppet-module-nfs.git
+	branch = liberty
+[submodule "puppet/modules/nova"]
+	path = puppet/modules/nova
+	url = https://github.com/gwdg/puppet-nova.git
+	branch = liberty
+[submodule "puppet/modules/ntp"]
+	path = puppet/modules/ntp
+	url = https://github.com/gwdg/puppetlabs-ntp.git
+	branch = liberty
