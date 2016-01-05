@@ -26,3 +26,51 @@ url=https://github.com/gwdg/puppetlabs-apache.git
 	path = puppet/modules/cloud
 	url = https://github.com/gwdg/puppet-openstack-cloud.git
 	branch = liberty
+[submodule "puppet/modules/concat"]
+	path = puppet/modules/concat
+url=https://github.com/gwdg/puppetlabs-concat.git
+	branch = liberty
+[submodule "puppet/modules/corosync"]
+	path = puppet/modules/corosync
+	url = https://msrba@github.com/gwdg/puppetlabs-corosync.git
+	branch = liberty
+[submodule "puppet/modules/dns"]
+	path = puppet/modules/dns
+url=https://github.com/gwdg/puppet-dns.git
+	branch = liberty
+[submodule "puppet/modules/docker"]
+	path = puppet/modules/docker
+	url = https://github.com/gwdg/puppet-docker.git
+	branch = liberty
+[submodule "puppet/modules/firewall"]
+	path = puppet/modules/firewall
+	url = https://github.com/gwdg/puppetlabs-firewall.git
+	branch = liberty
+[submodule "puppet/modules/galera"]
+	path = puppet/modules/galera
+	url = https://github.com/gwdg/puppet-galera.git
+	branch = liberty
+[submodule "puppet/modules/glance"]
+	path = puppet/modules/glance
+	url = https://github.com/gwdg/puppet-glance.git
+	branch = liberty
+[submodule "puppet/modules/haproxy"]
+	path = puppet/modules/haproxy
+	url = https://github.com/gwdg/puppetlabs-haproxy.git
+	branch = liberty
+[submodule "puppet/modules/heat"]
+	path = puppet/modules/heat
+	url = https://github.com/gwdg/puppet-heat.git
+	branch = liberty
+[submodule "puppet/modules/horizon"]
+	path = puppet/modules/horizon
+	url = https://github.com/gwdg/puppet-horizon.git
+	branch = liberty
+[submodule "inifile"]
+	path = inifile
+	url = https://github.com/gwdg/puppetlabs-inifile.git
+	branch = liberty
+[submodule "puppet/modules/java"]
+	path = puppet/modules/java
+	url = https://github.com/gwdg/puppetlabs-java.git
+	branch = liberty
