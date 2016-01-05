@@ -74,3 +74,23 @@ url=https://github.com/gwdg/puppet-dns.git
 	path = puppet/modules/java
 	url = https://github.com/gwdg/puppetlabs-java.git
 	branch = liberty
+[submodule "puppet/modules/keepalived"]
+	path = puppet/modules/keepalived
+	url = https://github.com/gwdg/puppet-module-keepalived.git
+	branch = liberty
+[submodule "puppet/modules/keystone"]
+	path = puppet/modules/keystone
+	url = https://github.com/gwdg/puppet-keystone.git
+	branch = liberty
+[submodule "puppet/modules/limits"]
+	path = puppet/modules/limits
+	url = https://github.com/gwdg/puppet-limits.git
+	branch = liberty
+[submodule "puppet/modules/logrotate"]
+	path = puppet/modules/logrotate
+	url = https://github.com/gwdg/puppet-logrotate.git
+	branch = liberty
+[submodule "puppet/modules/logstash"]
+	path = puppet/modules/logstash
+	url = https://github.com/gwdg/puppet-logstash.git
+	branch = liberty
