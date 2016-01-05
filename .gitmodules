@@ -22,7 +22,3 @@ url=https://github.com/gwdg/puppetlabs-apache.git
 	path = puppet/modules/cinder
 	url = https://msrba@github.com/gwdg/puppet-cinder.git
 	branch = liberty
-[submodule "puppet/modules/cloud"]
-	path = puppet/modules/cloud
-	url = https://github.com/gwdg/puppet-openstack-cloud.git
-	branch = liberty
