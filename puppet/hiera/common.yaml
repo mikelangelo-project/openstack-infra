@@ -38,7 +38,6 @@ cloud::site_domain:                                             'dev.cloud.gwdg.
 cloud::profile::aptly::vhost:                                   "puppetmaster.%{hiera('cloud::site_domain')}"
 
 cloud::manage_root_password:                                    false
-cloud::root_password:                                           '0wnm3!'
 
 # Storage setup
 
@@ -110,7 +109,6 @@ cloud::global::public_api_host:                                 'api.dev.cloud.g
 cloud::global::internal_api_proto:                              'http'
 cloud::global::admin_api_proto:                                 'http'
 
-cloud::global::db::root_password:                               's2EQFKBp7I'
 cloud::global::db::services_password:                           "%{hiera('cloud::global::db::root_password')}"
 
 cloud::global::internal_api:                                    "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_vip')}"
@@ -159,15 +157,10 @@ cloud::global::api::passwords::swift:                           "%{hiera('cloud:
 cloud::global::api::passwords::trove:                           "%{hiera('cloud::global::keystone::services_password')}"
 
 cloud::global::keystone::admin_user:                            'admin'
-cloud::global::keystone::admin_token:                           's2EQFKBp7I'
-cloud::global::keystone::services_password:                     's2EQFKBp7I'
-
-cloud::global::web_management::password:                        's2EQFKBp7I'
 
 cloud::global::db::host:                                        "%{hiera('cloud::global::internal_api_vip')}"
 
 cloud::global::rabbit::host:                                    "%{hiera('cloud::global::internal_api_vip')}:%{hiera('cloud::global::api::ports::rabbitmq')}"
-cloud::global::rabbit::password:                                's2EQFKBp7I'
 
 cloud::identity::keystone_master_name:                          "%{hiera('cloud::global::controller_master_name')}"
 cloud::messaging::rabbitmq_master_name:                         "%{hiera('cloud::global::controller_master_name')}"
@@ -495,7 +488,6 @@ cloud::identity::swift_public_url:                              "%{hiera('cloud:
 cloud::identity::swift_internal_url:                            "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::swift')/v1/KEY_$(tenant_id)s}"
 cloud::identity::swift_admin_url:                               "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::swift')}/v1"
 
-cloud::identity::ks_swift_dispersion_password:                  's2EQFKBp7I'
 cloud::identity::swift_password:                                "%{hiera('cloud::global::api::passwords::swift')}"
 
 cloud::identity::trove_public_url:                              "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::trove')}/v1.0/%(tenant_id)s"
@@ -918,7 +910,6 @@ cloud::network::l3::debug:                                      true
 cloud::network::l3::manage_tso:                                 true
 cloud::network::l3::ha_enabled:                                 false
 cloud::network::l3::ha_vrrp_auth_type:                          'PASS'
-cloud::network::l3::ha_vrrp_auth_password:                      'V3aJoFAppCAaVyih4pWm'
 cloud::network::l3::allow_automatic_l3agent_failover:           true
 cloud::network::l3::agent_mode:                                 'dvr_snat'
 
@@ -958,7 +949,6 @@ cloud::network::metadata::ks_nova_internal_proto:               "%{hiera('cloud:
 # Unused in module
 cloud::dashboard::ks_keystone_internal_host:                    "%{hiera('cloud::global::internal_api_vip')}"
 
-cloud::dashboard::secret_key:                                   '0U53qTFbEDhGeicS36Ej'
 cloud::dashboard::horizon_port:                                 "%{hiera('cloud::global::api::ports::horizon')}"
 cloud::dashboard::horizon_ssl_port:                             "%{hiera('cloud::global::api::ports::horizon_ssl')}"
 

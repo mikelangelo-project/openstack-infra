@@ -4,6 +4,7 @@
 :yaml:
   :datadir: /etc/puppet/environments
 :hierarchy:
+  - "%{::environment}/hiera/secret"
   - "%{::environment}/hiera/nodes/%{::hostname}"
   - "%{::environment}/hiera/roles/%{role}"
   - "%{::environment}/hiera/vagrant"
