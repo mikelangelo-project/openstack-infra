@@ -133,3 +133,63 @@ url=https://github.com/gwdg/puppet-dns.git
 	path = puppet/modules/pacemaker
 	url = https://github.com/gwdg/puppet-pacemaker.git
 	branch = liberty
+[submodule "puppet/modules/partial"]
+	path = puppet/modules/partial
+	url = https://github.com/gwdg/puppet-partial.git
+	branch = liberty
+[submodule "puppet/modules/postgresql"]
+	path = puppet/modules/postgresql
+	url = https://github.com/gwdg/puppetlabs-postgresql.git
+	branch = liberty
+[submodule "puppet/modules/puppetdb"]
+	path = puppet/modules/puppetdb
+	url = https://github.com/gwdg/puppetlabs-puppetdb.git
+	branch = liberty
+[submodule "puppet/modules/puppetdbquery"]
+	path = puppet/modules/puppetdbquery
+	url = https://github.com/gwdg/puppet-puppetdbquery.git
+	branch = liberty
+[submodule "puppet/modules/rabbitmq"]
+	path = puppet/modules/rabbitmq
+	url = https://github.com/gwdg/puppetlabs-rabbitmq.git
+	branch = liberty
+[submodule "puppet/modules/redis"]
+	path = puppet/modules/redis
+	url = https://github.com/gwdg/puppet-redis.git
+	branch = liberty
+[submodule "puppet/modules/sahara"]
+	path = puppet/modules/sahara
+	url = https://github.com/gwdg/puppet-sahara.git
+	branch = liberty
+[submodule "puppet/modules/ssh"]
+	path = puppet/modules/ssh
+	url = https://github.com/gwdg/puppet-ssh.git
+	branch = liberty
+[submodule "puppet/modules/staging"]
+	path = puppet/modules/staging
+	url = https://github.com/gwdg/puppet-staging.git
+	branch = liberty
+[submodule "puppet/modules/stdlib"]
+	path = puppet/modules/stdlib
+	url = https://github.com/gwdg/puppetlabs-stdlib.git
+	branch = liberty
+[submodule "puppet/modules/sudo"]
+	path = puppet/modules/sudo
+	url = https://github.com/gwdg/puppet-sudo.git
+	branch = liberty
+[submodule "puppet/modules/sysctl"]
+	path = puppet/modules/sysctl
+	url = https://github.com/gwdg/puppet-sysctl.git
+	branch = liberty
+[submodule "puppet/modules/trove"]
+	path = puppet/modules/trove
+	url = https://github.com/gwdg/puppet-trove.git
+	branch = liberty
+[submodule "puppet/modules/vswitch"]
+	path = puppet/modules/vswitch
+	url = https://github.com/gwdg/puppet-vswitch.git
+	branch = liberty
+[submodule "puppet/modules/xinetd"]
+	path = puppet/modules/xinetd
+	url = https://github.com/gwdg/puppetlabs-xinetd.git
+	branch = liberty
