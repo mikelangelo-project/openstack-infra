@@ -635,15 +635,7 @@ cloud::volume::storage::cinder_backends:
                 frontend:
                     total_bytes_sec:
                         value:                                  '100000000'
-                    read_bytes_sec:
-                        value:                                  '100000000'
-                    write_bytes_sec:
-                        value:                                  '100000000'
                     total_iops_sec: 
-                        value:                                  '100'
-                    read_iops_sec:
-                        value:                                  '100'
-                    write_iops_sec:
                         value:                                  '100'
 
 cloud::volume::storage::ks_keystone_internal_proto:             "%{hiera('cloud::global::internal_api_proto')}"
