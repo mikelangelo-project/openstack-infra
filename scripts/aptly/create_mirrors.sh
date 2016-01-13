@@ -5,8 +5,8 @@ BASE_DIR="$(dirname $(readlink -f $0))"
 source $BASE_DIR/base.sh
 
 APTLY_DEFAULT_FLAGS="-architectures=amd64"
-#KEYSERVER="keys.gnupg.net"
-KEYSERVER="key.ip6.li"
+KEYSERVER="keys.gnupg.net"
+#KEYSERVER="key.ip6.li"
 
 #
 # Create aptly mirror from url / ppa
