@@ -2,18 +2,17 @@
 ---
 
 cloud::database::sql::mysql::allowed_hosts:                     &allowed_hosts
-  - "%{hiera('vagrant::ip_prefix')}.1.11"
-  - "%{hiera('vagrant::ip_prefix')}.1.12"
+  - '10.108.0.38'
+  - '10.108.0.39'
 
 #cloud::database::sql::mysql::api_eth:                           'eth2'
 cloud::database::sql::mysql::galera_master_name:                'galera1'
 cloud::database::sql::mysql::galera_internal_ips:               
-  - "%{hiera('vagrant::ip_prefix')}.1.21"
-  - "%{hiera('vagrant::ip_prefix')}.1.22"
+  - '10.108.0.35'
+  - '10.108.0.36'
 
 cloud::database::sql::mysql::galera_gcache:                     '1G'
 
-#cloud::database::sql::mysql::mysql_root_password:               's2EQFKBp7I'
 cloud::database::sql::mysql::mysql_sys_maint_password:          "%{hiera('cloud::global::db::root_password')}"
 cloud::database::sql::mysql::galera_clustercheck_dbuser:        'clustercheckdb'
 cloud::database::sql::mysql::galera_clustercheck_dbpassword:    "%{hiera('cloud::database::sql::mysql::mysql_sys_maint_password')}"

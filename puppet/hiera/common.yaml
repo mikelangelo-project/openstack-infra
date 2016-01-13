@@ -2,20 +2,20 @@
 
 # -------------------------------------------------- General setup -----------------------------------------------------
 
-node::provisioning_ip:                                          "%{::ipaddress_eth1}"
-node::management_ip:                                            "%{::ipaddress_eth2}"
-node::overlay_ip:                                               "%{::ipaddress_eth3}"
-node::public_ip:                                                "%{::ipaddress_eth4}"
-node::storage_ip:                                               "%{::ipaddress_eth5}"
+node::provisioning_ip:                                          "%{::ipaddress_vlan1007}"
+node::management_ip:                                            "%{::ipaddress_vlan1006}"
+node::overlay_ip:                                               "%{::ipaddress_vlan1009}"
+node::public_ip:                                                "%{::ipaddress_vlan1008}"
+node::storage_ip:                                               "%{::ipaddress_vlan1006}"
 
 # ------ Base cloud configuration ------
 
-cloud::production:                                              false
+cloud::production:                                              true
 
 cloud::global::region:                                          'RegionOne'
-cloud::global::hypervisor:                                      'qemu'
+cloud::global::hypervisor:                                      'kvm'
 
-cloud::global::workers:                                         2
+cloud::global::workers:                                         8
 
 cloud::global::dns_server1:                                     '134.76.10.46'
 cloud::global::dns_server2:                                     '134.76.33.21'
@@ -33,9 +33,9 @@ cloud::dns_ips:
     - "%{hiera('cloud::global::dns_server1')}"
     - "%{hiera('cloud::global::dns_server2')}"
 
-cloud::site_domain:                                             'dev.cloud.gwdg.de'
+cloud::site_domain:                                             'liberty.mikelangelo.gwdg.de'
 
-cloud::profile::aptly::vhost:                                   "puppetmaster.%{hiera('cloud::site_domain')}"
+cloud::profile::aptly::vhost:                                   "aptly.%{hiera('cloud::site_domain')}"
 
 cloud::manage_root_password:                                    false
 
@@ -62,49 +62,47 @@ cloud::global::storage::ceph_fsid:                              ''
 cloud::global::storage::ceph_public_network:                    '10.108.32.0/24'
 cloud::global::storage::ceph_cluster_network:                   '10.108.31.128/25'
 
-cloud::global::storage::nfs_server:                             "%{hiera('vagrant::ip_prefix')}.200.6"
-cloud::global::storage::nfs_share:                              '/storage'
+cloud::global::storage::nfs_server:                             '10.108.32.25'
+cloud::global::storage::nfs_share:                              '/ifs/cloud/liberty'
 cloud::global::storage::nfs_options:                            '_netdev,vers=3'
 
 # Network setup
 
-cloud::global::ssh_port:                                        '22'
+cloud::global::network::provisioning_interface:                 'vlan1007'
+cloud::global::network::management_interface:                   'vlan1006'
+cloud::global::network::overlay_interface:                      'vlan1009'
+cloud::global::network::public_interface:                       'vlan1008'
+cloud::global::network::storage_interface:                      'vlan1006'
 
-cloud::global::network::provisioning_interface:                 'eth1'
-cloud::global::network::management_interface:                   'eth2'
-cloud::global::network::overlay_interface:                      'eth3'
-cloud::global::network::public_interface:                       'eth4'
-cloud::global::network::storage_interface:                      'eth5'
+cloud::global::network::provisioning_network:                   '10.109.2.0/24'
+cloud::global::network::management_network:                     '10.108.0.0/24'
+cloud::global::network::overlay_network:                        '10.108.1.0/24'
+cloud::global::network::public_network:                         '141.5.112.0/23'
+cloud::global::network::storage_network:                        ''
 
-cloud::global::network::provisioning_network:                   "10.%{hiera('vagrant::environment')}.254.0/24"
-cloud::global::network::management_network:                     "10.%{hiera('vagrant::environment')}.1.0/24"
-cloud::global::network::overlay_network:                        "10.%{hiera('vagrant::environment')}.2.0/24"
-cloud::global::network::public_network:                         "10.%{hiera('vagrant::environment')}.100.0/24"
-cloud::global::network::storage_network:                        "10.%{hiera('vagrant::environment')}.200.0/24"
-
-cloud::global::network::management_gateway:                     "10.%{hiera('vagrant::environment')}.1.1"
-cloud::global::network::public_gateway:                         "10.%{hiera('vagrant::environment')}.100.1"
+cloud::global::network::management_gateway:                     '10.108.0.1'
+cloud::global::network::public_gateway:                         '141.5.112.1'
 
 # Architecture setup
 
 cloud::global::loadbalancer::ips:
-    - "%{hiera('vagrant::ip_prefix')}.1.11"
-    - "%{hiera('vagrant::ip_prefix')}.1.12"
+    - '10.108.0.38'
+    - '10.108.0.39'
 
 cloud::global::controller_master_name:                          'controller1'
 
-cloud::global::controller1::ip:                                 "%{hiera('vagrant::ip_prefix')}.1.31"
-cloud::global::controller2::ip:                                 "%{hiera('vagrant::ip_prefix')}.1.32"
+cloud::global::controller1::ip:                                 '10.108.0.41'
+cloud::global::controller2::ip:                                 '10.108.0.42'
 
 cloud::global::controller1::rabbitmq:                           "%{hiera('cloud::global::controller1::ip')}:%{hiera('cloud::global::api::ports::rabbitmq')}"
 cloud::global::controller2::rabbitmq:                           "%{hiera('cloud::global::controller2::ip')}:%{hiera('cloud::global::api::ports::rabbitmq')}"
 
-cloud::global::public_api_vip:                                  "%{hiera('vagrant::ip_prefix')}.100.3"
-cloud::global::internal_api_vip:                                "%{hiera('vagrant::ip_prefix')}.1.3"
+cloud::global::public_api_vip:                                  '141.5.112.40'
+cloud::global::internal_api_vip:                                '10.108.0.40'
 cloud::global::admin_api_vip:                                   "%{hiera('cloud::global::internal_api_vip')}"
 
 cloud::global::public_api_proto:                                'https'
-cloud::global::public_api_host:                                 'api.dev.cloud.gwdg.de'
+cloud::global::public_api_host:                                 'api.liberty.mikelangelo.gwdg.de'
 
 cloud::global::internal_api_proto:                              'http'
 cloud::global::admin_api_proto:                                 'http'
@@ -313,9 +311,9 @@ cloud::auth_file::neutron_endpoint_type:                        'publicURL'
 
 # ------------------------------------------------ Logging server setup --------------------------------------------------
 
-cloud::logging::server::kibana_bind_ip:                         "%{hiera('vagrant::ip_prefix')}.1.14" 
+cloud::logging::server::kibana_bind_ip:                         '10.108.0.34' 
 cloud::logging::server::kibana_port:                            "%{hiera('cloud::global::api::ports::kibana')}"
-cloud::logging::server::logstash_syslog_bind_ip:                "%{hiera('vagrant::ip_prefix')}.1.14" 
+cloud::logging::server::logstash_syslog_bind_ip:                '10.108.0.34' 
 cloud::logging::server::logstash_syslog_port:                   "%{hiera('cloud::global::api::ports::logstash_syslog')}"
 
 # ---------------------------------------------------- Memcached setup -----------------------------------------------------
@@ -367,7 +365,6 @@ rabbitmq::repos_ensure:                                         false
 rabbitmq::tcp_keepalive:                                        false
 rabbitmq::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
 
-cloud::messaging::erlang_cookie:                                'devCW2bWgop8hdwJ8TEz'
 cloud::messaging::cluster_node_type:                            'disc'
 cloud::messaging::rabbit_names:
     - 'controller1'
@@ -420,7 +417,7 @@ cloud::identity::memcache_servers:
     - "%{hiera('cloud::global::controller1::ip')}:11211"
     - "%{hiera('cloud::global::controller2::ip')}:11211"
 
-cloud::identity::ks_admin_email:                                'cloud@gwdg.de'
+cloud::identity::ks_admin_email:                                'mikelangelo-internal@gwdg.de'
 cloud::identity::ks_admin_password:                             "%{hiera('cloud::global::keystone::services_password')}"
 cloud::identity::ks_admin_tenant:                               'admin'
 cloud::identity::ks_admin_token:                                "%{hiera('cloud::global::keystone::admin_token')}"
@@ -620,23 +617,20 @@ cloud::volume::api::firewall_settings:                          {}
 
 cloud::volume::storage::cinder_backends:
     nfs:
-        standard:
-#            volume_backend_name:        
+        standard:        
             nfs_servers:
                 - "%{hiera('cloud::global::storage::nfs_server')}:%{hiera('cloud::global::storage::nfs_share')}/volumes"
             nfs_mount_options:                                  "%{hiera('cloud::global::storage::nfs_options')}"
-#            nfs_disk_util:
             nfs_sparsed_volumes:                                true
-#            nfs_mount_point_base:
             nfs_shares_config:                                  '/etc/cinder/shares.conf'
             nfs_used_ratio:                                     '0.95'
             nfs_oversub_ratio:                                  '1.0'
-            qos:
-                frontend:
-                    total_bytes_sec:
-                        value:                                  '100000000'
-                    total_iops_sec: 
-                        value:                                  '100'
+        #    qos:
+        #        frontend:
+        #            total_bytes_sec:
+        #                value:                                  '100000000'
+        #            total_iops_sec: 
+        #                value:                                  '100'
 
 cloud::volume::storage::ks_keystone_internal_proto:             "%{hiera('cloud::global::internal_api_proto')}"
 cloud::volume::storage::ks_keystone_internal_port:              "%{hiera('cloud::global::api::ports::keystone')}"
@@ -945,7 +939,7 @@ cloud::dashboard::horizon_port:                                 "%{hiera('cloud:
 cloud::dashboard::horizon_ssl_port:                             "%{hiera('cloud::global::api::ports::horizon_ssl')}"
 
 #cloud::dashboard::servername:                                   "%{::fqdn}"
-cloud::dashboard::servername:                                   "horizon.dev.cloud.gwdg.de"
+cloud::dashboard::servername:                                   'horizon.liberty.mikelangelo.gwdg.de'
 
 #cloud::dashboard::api_eth:                                      '127.0.0.1'
 

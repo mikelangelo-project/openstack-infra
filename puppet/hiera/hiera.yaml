@@ -7,5 +7,4 @@
   - "%{::environment}/hiera/secret"
   - "%{::environment}/hiera/nodes/%{::hostname}"
   - "%{::environment}/hiera/roles/%{role}"
-  - "%{::environment}/hiera/vagrant"
   - "%{::environment}/hiera/common"
