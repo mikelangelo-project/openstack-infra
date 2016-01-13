@@ -10,7 +10,7 @@ LOCAL_REPOSITORY="liberty-local"
 echo ">>> Setting up 'testing' repo using aptly..."
 
 # Import key
-gpg --allow-secret-key-import --import /vagrant/files/aptly/aptly.priv 
+gpg --allow-secret-key-import --import /vagrant/assets/aptly/aptly.priv 
 
 $BASE_DIR/install.sh
 $BASE_DIR/create_repositories.sh $LOCAL_REPOSITORY
