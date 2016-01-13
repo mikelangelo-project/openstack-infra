@@ -198,7 +198,7 @@ apt::sources:
     include_src:            false
     pin:                    '1002'
     key:                    '5B834965F7F7ECCAE8186F7788B9C67706E0E48F'
-    key_source:             '/vagrant/files/aptly/aptly.pub'
+    key_source:             '/vagrant/assets/aptly/aptly.pub'
 
   'trusty':
     location:               'http://ubuntu.mirror.lrz.de/ubuntu'
