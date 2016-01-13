@@ -596,7 +596,7 @@ cloud::volume::use_syslog:                                      true
 # ----------------------------------------------------- Cinder API setup -----------------------------------------------------
 
 cinder::api::service_workers:                                   "%{hiera('cloud::global::workers')}"
-cinder::api::nova_catalog_info:                                 'conpute:nova:internalURL'
+cinder::api::nova_catalog_info:                                 'compute:Compute Service:internalURL'
 
 cloud::volume::api::default_volume_type:                        'standard'
 
@@ -1060,6 +1060,7 @@ cloud::telemetry::os_endpoint_type:                             'publicURL'
 
 cloud::telemetry::api::ks_keystone_internal_host:               "%{hiera('cloud::global::internal_api_vip')}"
 cloud::telemetry::api::ks_keystone_internal_proto:              "%{hiera('cloud::global::internal_api_proto')}"
+cloud::telemetry::api::ks_keystone_admin_port:                  "%{hiera('cloud::global::api::ports::keystone_admin')}"
 cloud::telemetry::api::ks_ceilometer_password:                  "%{hiera('cloud::global::api::passwords::ceilometer')}"
 cloud::telemetry::api::replicaset_enabled:                      "%{hiera('cloud::telemetry::collector::replicaset_enabled')}"
 cloud::telemetry::api::firewall_settings:                       {}
