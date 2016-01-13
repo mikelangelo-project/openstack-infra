@@ -1,6 +1,0 @@
-#
----
-
-cloud::profile::nfs_server::server:     "%{hiera('vagrant::ip_prefix')}.200.6"
-cloud::profile::nfs_server::clients:
-  - "%{hiera('vagrant::ip_prefix')}.200.0/24(rw,insecure,async,no_root_squash)"
