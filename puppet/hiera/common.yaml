@@ -1058,11 +1058,11 @@ cloud::telemetry::os_endpoint_type:                             'publicURL'
 
 # ---------------------------------------------------- Ceilometer API setup ------------------------------------------------------------
 
-cloud::telemetry::api::ks_keystone_internal_host:           "%{hiera('cloud::global::internal_api_vip')}"
-cloud::telemetry::api::ks_keystone_internal_proto:          "%{hiera('cloud::global::internal_api_proto')}"
-cloud::telemetry::api::ks_ceilometer_password:              "%{hiera('cloud::global::api::passwords::ceilometer')}"
-cloud::telemetry::api::replicaset_enabled:                  "%{hiera('cloud::telemetry::collector::replicaset_enabled')}"
-cloud::telemetry::api::firewall_settings:                   {}
+cloud::telemetry::api::ks_keystone_internal_host:               "%{hiera('cloud::global::internal_api_vip')}"
+cloud::telemetry::api::ks_keystone_internal_proto:              "%{hiera('cloud::global::internal_api_proto')}"
+cloud::telemetry::api::ks_ceilometer_password:                  "%{hiera('cloud::global::api::passwords::ceilometer')}"
+cloud::telemetry::api::replicaset_enabled:                      "%{hiera('cloud::telemetry::collector::replicaset_enabled')}"
+cloud::telemetry::api::firewall_settings:                       {}
 cloud::telemetry::api::mongo_nodes:                         
     - "mongo1.%{hiera('cloud::site_domain')}:27017"
     - "mongo2.%{hiera('cloud::site_domain')}:27017"
@@ -1080,5 +1080,4 @@ cloud::telemetry::collector::mongo_nodes:
     - "mongo2.%{hiera('cloud::site_domain')}:27017"
     - "mongo3.%{hiera('cloud::site_domain')}:27017"
 
-cloud::telemetry::collector::replicaset_enabled:                true
-
+cloud::telemetry::collector::replica_set_enabled:               true
