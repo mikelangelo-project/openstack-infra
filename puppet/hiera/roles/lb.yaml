@@ -33,7 +33,7 @@ cloud::loadbalancer::haproxy_global_options:
 
 cloud::loadbalancer::haproxy_defaults_options:                  {}
 
-cloud::loadbalancer::haproxy_certs:                             'api.dev.cloud.gwdg.de_20150716_all.pem'
+cloud::loadbalancer::haproxy_certs:                             'api.liberty.mikelangelo.gwdg.de_20160118_all.pem'
 
 cloud::loadbalancer::vip_monitor_ip:                            "%{hiera('cloud::global::internal_api_vip')}"
 
