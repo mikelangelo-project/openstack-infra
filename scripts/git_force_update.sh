@@ -9,7 +9,7 @@ cd $PROJECT_TOPLEVEL_DIR
 git pull
 git submodule update --remote --init --recursive
 
-cd $PROJECT_TOPLEVEL_DIR/compute-cloud
+cd $PROJECT_TOPLEVEL_DIR/puppet/modules
 git checkout $PROJECT_BRANCH; git pull; git reset --hard origin/$PROJECT_BRANCH
 
 git submodule foreach -q --recursive 'branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch)"; git checkout $branch; git reset --hard origin/liberty'

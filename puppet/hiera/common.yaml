@@ -63,10 +63,12 @@ cloud::global::storage::ceph_public_network:                    '10.108.32.0/24'
 cloud::global::storage::ceph_cluster_network:                   '10.108.31.128/25'
 
 cloud::global::storage::nfs_server:                             '10.108.32.25'
-cloud::global::storage::nfs_share:                              '/ifs/cloud/liberty'
+cloud::global::storage::nfs_share:                              '/ifs/mikelangelo/liberty'
 cloud::global::storage::nfs_options:                            '_netdev,vers=3'
 
 # Network setup
+
+cloud::global::ssh_port:                                        '22'
 
 cloud::global::network::provisioning_interface:                 'vlan1007'
 cloud::global::network::management_interface:                   'vlan1006'
