@@ -941,7 +941,7 @@ cloud::dashboard::horizon_port:                                 "%{hiera('cloud:
 cloud::dashboard::horizon_ssl_port:                             "%{hiera('cloud::global::api::ports::horizon_ssl')}"
 
 #cloud::dashboard::servername:                                   "%{::fqdn}"
-cloud::dashboard::servername:                                   'horizon.liberty.mikelangelo.gwdg.de'
+cloud::dashboard::servername:                                   'horizon.mikelangelo.gwdg.de'
 
 #cloud::dashboard::api_eth:                                      '127.0.0.1'
 
