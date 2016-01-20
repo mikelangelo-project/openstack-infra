@@ -6,7 +6,7 @@ source $BASE_DIR/base.sh
 
 APTLY_DEFAULT_FLAGS="-architectures=amd64 -remove-files=true -force-replace=true"
 PACKAGE_DOWNLOAD_DIR="/tmp"
-PACKAGE_DIR="$BASE_DIR/../../files/aptly/deb/*.deb"
+PACKAGE_DIR="$BASE_DIR/../../assets/aptly/deb/*.deb"
 
 if (( $# == 1 ))
 then
