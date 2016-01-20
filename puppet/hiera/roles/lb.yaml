@@ -20,7 +20,7 @@ cloud::loadbalancer::haproxy_ensure:                            "%{hiera('cloud:
 
 cloud::loadbalancer::haproxy_global_options:
 
-    log:                            "%{::ipaddress} local0"
+    log:                            "%{hiera('cloud::logging::server::logstash_syslog_bind_ip')}:%{hiera('cloud::logging::server::logstash_syslog_port')} local0"
     maxconn:                        '4096'
    
     # Do not set nbproc (1 worker is best practice vor haproxy)
