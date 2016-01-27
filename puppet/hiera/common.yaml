@@ -296,6 +296,8 @@ cloud::global::db::neutron_password:                            "%{hiera('cloud:
 cloud::global::db::trove_user:                                  'trove'
 cloud::global::db::trove_password:                              "%{hiera('cloud::global::db::services_password')}"
 
+cloud::global::db::magnum_user:                                 'magnum'
+cloud::global::db::magnum_password:                             "%{hiera('cloud::global::db::services_password')}"
 # ------------------------------------------------ Auth file setup -----------------------------------------------------
 
 cloud::auth_file::admin_password:                               "%{hiera('cloud::identity::ks_admin_password')}"

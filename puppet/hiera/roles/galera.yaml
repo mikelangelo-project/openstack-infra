@@ -54,3 +54,8 @@ cloud::database::sql::mysql::trove_db_user:                     "%{hiera('cloud:
 cloud::database::sql::mysql::trove_db_password:                 "%{hiera('cloud::global::db::trove_password')}"
 cloud::database::sql::mysql::trove_db_allowed_hosts:            *allowed_hosts
 
+cloud::database::sql::mysql::magnum_db_host:                    "%{hiera('cloud::global::db::host')}"
+cloud::database::sql::mysql::magnum_db_user:                    "%{hiera('cloud::global::db::magnum_user')}"
+cloud::database::sql::mysql::magnum_db_password:                "%{hiera('cloud::global::db::magnum_password')}"
+cloud::database::sql::mysql::magnum_db_allowed_hosts:           *allowed_hosts
+
