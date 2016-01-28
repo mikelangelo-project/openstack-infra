@@ -138,6 +138,8 @@ cloud::global::api::ports::heat_cloudwatch:                     8003
 cloud::global::api::ports::swift:                               8080
 cloud::global::api::ports::trove:                               8779
 
+cloud::global::api::ports::magnum:                              9511
+
 cloud::global::api::ports::kibana:                              5601
 cloud::global::api::ports::logstash_syslog:                     514
 
@@ -155,6 +157,7 @@ cloud::global::api::passwords::heat:                            "%{hiera('cloud:
 cloud::global::api::passwords::neutron:                         "%{hiera('cloud::global::keystone::services_password')}"
 cloud::global::api::passwords::swift:                           "%{hiera('cloud::global::keystone::services_password')}"
 cloud::global::api::passwords::trove:                           "%{hiera('cloud::global::keystone::services_password')}"
+cloud::global::api::passwords::magnum:                          "%{hiera('cloud::global::keystone::services_password')}"
 
 cloud::global::keystone::admin_user:                            'admin'
 
@@ -497,6 +500,11 @@ cloud::identity::trove_admin_url:                               "%{hiera('cloud:
 
 cloud::identity::trove_password:                                "%{hiera('cloud::global::api::passwords::trove')}"
 
+cloud::identity::magnum_public_url:                             "%{hiera('cloud::global::public_api')}:%{hiera('cloud::global::api::ports::magnum')}/v1"
+cloud::identity::magnum_internal_url:                           "%{hiera('cloud::global::internal_api')}:%{hiera('cloud::global::api::ports::magnum')}/v1"
+cloud::identity::magnum_admin_url:                              "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::magnum')}/v1"
+
+cloud::identity::magnum_password:                               "%{hiera('cloud::global::api::passwords::magnum')}"
 
 # ----------------------------------------------------- Glance registry setup -----------------------------------------------------
 
