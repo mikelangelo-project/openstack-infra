@@ -1073,6 +1073,7 @@ cloud::orchestration::api::firewall_settings:                   {}
 heat::engine::configure_delegated_roles:                        false
 
 cloud::orchestration::engine::enabled:                          true
+cloud::orchestration::engine::workers:                          "%{hiera('cloud::global::workers')}"
 
 cloud::orchestration::engine::ks_heat_public_host:              "%{hiera('cloud::global::public_api_host')}"
 cloud::orchestration::engine::ks_heat_public_proto:             "%{hiera('cloud::global::public_api_proto')}"
