@@ -37,30 +37,32 @@ cloud::loadbalancer::haproxy_certs:                             'api.liberty.mik
 
 cloud::loadbalancer::vip_monitor_ip:                            "%{hiera('cloud::global::internal_api_vip')}"
 
-cloud::loadbalancer::swift_api:                                 false
-cloud::loadbalancer::ceilometer_api:                            true
-cloud::loadbalancer::cinder_api:                                true
-cloud::loadbalancer::glance_api:                                true
-cloud::loadbalancer::glance_registry:                           true
-cloud::loadbalancer::neutron_api:                               true
-cloud::loadbalancer::heat_api:                                  true
-cloud::loadbalancer::heat_cfn_api:                              true
-cloud::loadbalancer::heat_cloudwatch_api:                       true
-cloud::loadbalancer::nova_api:                                  true
-cloud::loadbalancer::ec2_api:                                   true
-cloud::loadbalancer::metadata_api:                              true
-cloud::loadbalancer::keystone_api:                              true
-cloud::loadbalancer::keystone_api_admin:                        true
-cloud::loadbalancer::trove_api:                                 false
-cloud::loadbalancer::horizon:                                   true
-cloud::loadbalancer::horizon_ssl:                               false
-cloud::loadbalancer::rabbitmq:                                  true
-cloud::loadbalancer::spice:                                     false
-cloud::loadbalancer::novnc:                                     true
-cloud::loadbalancer::elasticsearch:                             false
-cloud::loadbalancer::kibana:                                    true
-cloud::loadbalancer::logstash_syslog:                           true
 cloud::loadbalancer::haproxy_auth:                              "admin:%{hiera('cloud::global::web_management::password')}"
+
+cloud::loadbalancer::enable_swift_api:                          false
+cloud::loadbalancer::enable_ceilometer_api:                     true
+cloud::loadbalancer::enable_cinder_api:                         true
+cloud::loadbalancer::enable_glance_api:                         true
+cloud::loadbalancer::enable_glance_registry:                    true
+cloud::loadbalancer::enable_neutron_api:                        true
+cloud::loadbalancer::enable_heat_api:                           true
+cloud::loadbalancer::enable_heat_cfn_api:                       true
+cloud::loadbalancer::enable_heat_cloudwatch_api:                true
+cloud::loadbalancer::enable_nova_api:                           true
+cloud::loadbalancer::enable_ec2_api:                            true
+cloud::loadbalancer::enable_metadata_api:                       true
+cloud::loadbalancer::enable_keystone_api:                       true
+cloud::loadbalancer::enable_keystone_api_admin:                 true
+cloud::loadbalancer::enable_trove_api:                          false
+cloud::loadbalancer::enable_horizon:                            true
+cloud::loadbalancer::enable_horizon_ssl:                        false
+cloud::loadbalancer::enable_rabbitmq:                           true
+cloud::loadbalancer::enable_rabbitmq_management:                true
+cloud::loadbalancer::enable_spice:                              false
+cloud::loadbalancer::enable_novnc:                              true
+cloud::loadbalancer::enable_elasticsearch:                      false
+cloud::loadbalancer::enable_kibana:                             true
+cloud::loadbalancer::enable_logstash_syslog:                    true
 
 # Allow to override HAProxy options
 cloud::loadbalancer::ceilometer_options:                        {}                                                                                                                                          
