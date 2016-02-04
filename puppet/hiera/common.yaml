@@ -200,6 +200,30 @@ cloud::firewall_post_extras:                                    {}
 cloud::global::rabbitmq::heartbeat_timeout_threshold:           60
 cloud::global::rabbitmq::heartbeat_rate:                        2
 
+# Keystone LDAP setup
+cloud::global::use_ldap:            &cloud_global_use_ldap      false
+
+keystone::ldap::url:                                            ''
+keystone::ldap::user:                                           ''
+keystone::ldap::password:                                       ''
+keystone::ldap::suffix:                                         '' 
+keystone::ldap::user_tree_dn:                                   ''
+keystone::ldap::project_tree_dn:                                ''
+keystone::ldap::project_objectclass:                            ''
+
+keystone::ldap::role_tree_dn:                                   ''
+keystone::ldap::identity_driver:                                ''
+
+keystone::ldap::use_dumb_member:                                true
+keystone::ldap::user_id_attribute:                              ''
+keystone::ldap::user_name_attribute:                            ''
+keystone::ldap::user_mail_attribute:                            ''
+keystone::ldap::user_enabled_attribute:                         ''
+
+keystone::ldap::project_member_attribute:                       ''
+keystone::ldap::project_desc_attribute:                         ''
+keystone::ldap::project_enabled_attribute:                      ''
+keystone::ldap::project_enabled_emulation:                      false
 # --------------------------------------------------- Apt setup -------------------------------------------------------
 
 apt::sources:
@@ -396,7 +420,7 @@ keystone::compute_port:                                         "%{hiera('cloud:
 keystone::public_port:                                          "%{hiera('cloud::global::api::ports::keystone')}"
 keystone::admin_port:                                           "%{hiera('cloud::global::api::ports::keystone_admin')}"
 
-#cloud::identity::api_eth:                                       "%{hiera('cloud::global::internal_api_vip')}"
+cloud::identity::use_ldap:                                      *cloud_global_use_ldap
 cloud::identity::region:                                        'RegionOne'
 cloud::identity::verbose:                                       *cloud_global_verbose
 cloud::identity::debug:                                         *cloud_global_debug
