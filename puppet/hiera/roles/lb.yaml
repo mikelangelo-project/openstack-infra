@@ -14,8 +14,6 @@ cloud::loadbalancer::vip_monitor_ip:                            false
 cloud::loadbalancer::galera_ip:
     - "%{hiera('cloud::global::internal_api_vip')}"
 
-cloud::loadbalancer::galera_slave:                              false
-
 cloud::loadbalancer::haproxy_ensure:                            "%{hiera('cloud::global::package_ensure')}"
 
 cloud::loadbalancer::haproxy_global_options:
@@ -63,6 +61,8 @@ cloud::loadbalancer::enable_novnc:                              true
 cloud::loadbalancer::enable_elasticsearch:                      false
 cloud::loadbalancer::enable_kibana:                             true
 cloud::loadbalancer::enable_logstash_syslog:                    true
+cloud::loadbalancer::enable_galera:                             true
+cloud::loadbalancer::enable_galera_readonly:                    true
 
 # Allow to override HAProxy options
 cloud::loadbalancer::ceilometer_options:                        {}                                                                                                                                          
@@ -86,6 +86,7 @@ cloud::loadbalancer::horizon_options:                           {}
 cloud::loadbalancer::horizon_ssl_options:                       {}
 cloud::loadbalancer::rabbitmq_options:                          {}
 cloud::loadbalancer::galera_options:                            {}
+cloud::loadbalancer::galera_readonly_options:                   {}
 cloud::loadbalancer::elasticsearch_options:                     {}
 cloud::loadbalancer::kibana_options:                            {}
 cloud::loadbalancer::logstash_syslog_options:                   {}
@@ -114,6 +115,8 @@ cloud::loadbalancer::novnc_port:                                "%{hiera('cloud:
 cloud::loadbalancer::elasticsearch_port:                        '9200'
 cloud::loadbalancer::kibana_port:                               "%{hiera('cloud::global::api::ports::kibana')}"
 cloud::loadbalancer::logstash_syslog_port:                      "%{hiera('cloud::global::api::ports::logstash_syslog')}"
+cloud::loadbalancer::galera_port:                               "%{hiera('cloud::global::api::ports::galera')}"
+cloud::loadbalancer::galera_readonly_port:                      "%{hiera('cloud::global::api::ports::galera_readonly')}"
 
 cloud::loadbalancer::firewall_settings:                         {}
 

@@ -160,6 +160,9 @@ cloud::global::api::ports::rabbitmq_management:                 15672
 cloud::global::api::ports::horizon:                             80
 cloud::global::api::ports::horizon_ssl:                         443
 
+cloud::global::api::ports::galera:                              3306
+cloud::global::api::ports::galera_readonly:                     3307
+
 cloud::global::api::passwords::nova:                            "%{hiera('cloud::global::keystone::services_password')}"
 cloud::global::api::passwords::ceilometer:                      "%{hiera('cloud::global::keystone::services_password')}"
 cloud::global::api::passwords::cinder:                          "%{hiera('cloud::global::keystone::services_password')}"
