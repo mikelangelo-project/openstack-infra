@@ -371,7 +371,8 @@ cloud::database::nosql::memcached::firewall_settings:           {}
 
 # Direct module configuration
 
-mongodb::globals::manage_package_repo:                          true
+mongodb::globals::manage_package_repo:                          false
+mongodb::globals::manage_package:                               true
 mongodb::globals::version:                                      '2.6.11'
 
 mongodb::server::verbose:                                       *cloud_global_verbose
