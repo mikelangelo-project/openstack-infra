@@ -61,8 +61,8 @@ find_local_executable GPG   gpg
 create_mirror   "mariadb"       "http://mirrors.n-ix.net/mariadb/repo/10.0/ubuntu"                      "trusty"                        "1BB943DB"  ""
 
 # OpenStack mirror
-#create_mirror   "juno-staging"  "http://ppa.launchpad.net/ubuntu-cloud-archive/juno-staging/ubuntu"    "trusty main"                   "9F68104E"  ""
-create_mirror   "liberty"       "http://ubuntu-cloud.archive.canonical.com/ubuntu"                      "trusty-updates/liberty main"   "EC4926EA"  ""
+create_mirror   "liberty-staging"   "http://ppa.launchpad.net/ubuntu-cloud-archive/liberty-staging/ubuntu"    "trusty main"                   "9F68104E"  ""
+#create_mirror   "liberty"       "http://ubuntu-cloud.archive.canonical.com/ubuntu"                      "trusty-updates/liberty main"   "EC4926EA"  ""
 
 create_mirror   "puppetlabs"    "http://apt.puppetlabs.com"                                             "trusty"                        "4BD6EC30"  ""
 
