@@ -28,6 +28,8 @@ cloud::global::ldap_server:                                     ''
 
 cloud::global::package_ensure:                                  'latest'
 
+cloud::global::debug:           &cloud_global_debug             true
+cloud::global::verbose:         &cloud_global_verbose           true
 cloud::global::use_syslog:      &cloud_global_use_syslog        true
 
 cloud::ntp_servers:
@@ -229,16 +231,6 @@ apt::sources:
     repos:                  'main restricted universe multiverse'
     include_src:            true
 
-#apt::ppas:
-#  'cloud-archive:juno':
-#    ensure:                 'present'
-
-# ------ Base OpenStack configuration ------
-
-# Log levels
-openstack::verbose:                                             true
-openstack::debug:                                               true
-
 # ------------------------------------------------------- Misc stuff ----------------------------------------------------------
 
 openstacklib::openstackclient::package_ensure:                  "%{hiera('cloud::global::package_ensure')}"
@@ -343,7 +335,7 @@ cloud::database::nosql::memcached::firewall_settings:           {}
 mongodb::globals::manage_package_repo:                          true
 mongodb::globals::version:                                      '2.6.11'
 
-mongodb::server::verbose:                                       true
+mongodb::server::verbose:                                       *cloud_global_verbose
 mongodb::server::replset:                                       'ceilometer'
 #::mongodb::server::bind_ip:                                     '127.0.0.1'
 #mongodb::replset::sets:
@@ -406,8 +398,8 @@ keystone::admin_port:                                           "%{hiera('cloud:
 
 #cloud::identity::api_eth:                                       "%{hiera('cloud::global::internal_api_vip')}"
 cloud::identity::region:                                        'RegionOne'
-cloud::identity::verbose:                                       true
-cloud::identity::debug:                                         true
+cloud::identity::verbose:                                       *cloud_global_verbose
+cloud::identity::debug:                                         *cloud_global_debug
 cloud::identity::log_facility:                                  'LOG_LOCAL6'
 cloud::identity::use_syslog:                                    *cloud_global_use_syslog
 cloud::identity::ks_token_expiration:                           '3600'
@@ -533,8 +525,8 @@ cloud::image::registry::ks_glance_registry_internal_port:       "%{hiera('cloud:
 cloud::image::registry::ks_glance_password:                     "%{hiera('cloud::global::api::passwords::glance')}"
 
 #cloud::image::registry::api_eth:                                '127.0.0.1'
-cloud::image::registry::verbose:                                true
-cloud::image::registry::debug:                                  true
+cloud::image::registry::verbose:                                *cloud_global_verbose
+cloud::image::registry::debug:                                  *cloud_global_debug
 cloud::image::registry::log_facility:                           'LOG_LOCAL1'
 cloud::image::registry::use_syslog:                             *cloud_global_use_syslog
 cloud::image::registry::firewall_settings:                      {}
@@ -565,8 +557,8 @@ cloud::image::api::rabbit_host:                                 "%{hiera('cloud:
 cloud::image::api::openstack_vip:                               "%{hiera('cloud::global::internal_api_vip')}"
 cloud::image::api::glance_rbd_pool:                             'images'
 cloud::image::api::glance_rbd_user:                             'glance'
-cloud::image::api::verbose:                                     true
-cloud::image::api::debug:                                       true
+cloud::image::api::verbose:                                     *cloud_global_verbose
+cloud::image::api::debug:                                       *cloud_global_debug
 cloud::image::api::log_facility:                                'LOG_LOCAL1'
 cloud::image::api::use_syslog:                                  *cloud_global_use_syslog
 cloud::image::api::backend:                                     'nfs'
@@ -605,8 +597,8 @@ cloud::volume::rabbit_hosts:
 
 cloud::volume::rabbit_password:                                 "%{hiera('cloud::global::rabbit::password')}"
 
-cloud::volume::verbose:                                         true
-cloud::volume::debug:                                           true
+cloud::volume::verbose:                                         *cloud_global_verbose
+cloud::volume::debug:                                           *cloud_global_debug
 cloud::volume::log_facility:                                    'LOG_LOCAL5'
 cloud::volume::storage_availability_zone:                       'nova'
 cloud::volume::use_syslog:                                      *cloud_global_use_syslog
@@ -699,8 +691,8 @@ cloud::compute::neutron_protocol:                               "%{hiera('cloud:
 cloud::compute::neutron_password:                               "%{hiera('cloud::global::api::passwords::neutron')}"
 cloud::compute::neutron_region_name:                            "%{hiera('cloud::global::region')}"
 
-cloud::compute::verbose:                                        true
-cloud::compute::debug:                                          true
+cloud::compute::verbose:                                        *cloud_global_verbose
+cloud::compute::debug:                                          *cloud_global_debug
 cloud::compute::use_syslog:                                     *cloud_global_use_syslog
 cloud::compute::log_facility:                                   'LOG_LOCAL0'
 cloud::compute::memcache_servers:
@@ -746,8 +738,8 @@ cloud::compute::consoleproxy::firewall_settings:                {}
 neutron::rabbit_heartbeat_timeout_threshold:                    "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
 neutron::rabbit_heartbeat_rate:                                 "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
 
-cloud::network::verbose:                                        true
-cloud::network::debug:                                          true
+cloud::network::verbose:                                        *cloud_global_verbose
+cloud::network::debug:                                          *cloud_global_debug
 
 cloud::network::rabbit_hosts:
     - "%{hiera('cloud::global::controller1::rabbitmq')}"
@@ -912,7 +904,7 @@ neutron::agents::l3::router_delete_namespaces:                  'false'
 
 cloud::network::l3::external_int:                               "%{hiera('cloud::global::network::public_interface')}"
 cloud::network::l3::ext_provider_net:                           false
-cloud::network::l3::debug:                                      true
+cloud::network::l3::debug:                                      *cloud_global_debug
 cloud::network::l3::manage_tso:                                 true
 cloud::network::l3::ha_enabled:                                 false
 cloud::network::l3::ha_vrrp_auth_type:                          'PASS'
@@ -922,7 +914,7 @@ cloud::network::l3::agent_mode:                                 'dvr_snat'
 # -------------------------------------------------- Neutron dhcp agent setup  -----------------------------------------------------
 
 cloud::network::dhcp::veth_mtu:                                 '1500'
-cloud::network::dhcp::debug:                                    true
+cloud::network::dhcp::debug:                                    *cloud_global_debug
 cloud::network::dhcp::dnsmasq_dns_servers:
     - "%{hiera('cloud::global::dns_server1')}"
     - "%{hiera('cloud::global::dns_server2')}"
@@ -936,7 +928,7 @@ neutron::agents::metadata::metadata_backlog:                    '4096'
 neutron::agents::metadata::metadata_memory_cache_ttl:           '5'
 
 cloud::network::metadata::enabled:                              true
-cloud::network::metadata::debug:                                true
+cloud::network::metadata::debug:                                *cloud_global_debug
 
 cloud::network::metadata::ks_neutron_password:                  "%{hiera('cloud::global::api::passwords::neutron')}"
 cloud::network::metadata::neutron_metadata_proxy_shared_secret: "%{hiera('cloud::compute::api::neutron_metadata_proxy_shared_secret')}"
@@ -967,7 +959,7 @@ cloud::dashboard::keystone_host:                                "%{hiera('cloud:
 cloud::dashboard::keystone_proto:                               "%{hiera('cloud::global::internal_api_proto')}"
 cloud::dashboard::keystone_port:                                "%{hiera('cloud::global::api::ports::keystone')}"
 
-cloud::dashboard::debug:                                        true
+cloud::dashboard::debug:                                        *cloud_global_debug
 
 # Deploy horizon in apache with ssl (needs certs set)
 cloud::dashboard::listen_ssl:                                   false
@@ -1017,8 +1009,8 @@ cloud::orchestration::rabbit_hosts:
 
 cloud::orchestration::rabbit_password:                          "%{hiera('cloud::global::rabbit::password')}"
 
-cloud::orchestration::verbose:                                  true
-cloud::orchestration::debug:                                    true
+cloud::orchestration::verbose:                                  *cloud_global_verbose
+cloud::orchestration::debug:                                    *cloud_global_debug
 cloud::orchestration::use_syslog:                               *cloud_global_use_syslog
 cloud::orchestration::log_facility:                             'LOG_LOCAL7'
 cloud::orchestration::os_endpoint_type:                         'publicURL'
@@ -1070,8 +1062,8 @@ cloud::telemetry::ks_keystone_internal_proto:                   "%{hiera('cloud:
 cloud::telemetry::ks_ceilometer_password:                       "%{hiera('cloud::global::api::passwords::ceilometer')}"
 
 cloud::telemetry::region:                                       "%{hiera('cloud::global::region')}"
-cloud::telemetry::verbose:                                      true
-cloud::telemetry::debug:                                        true
+cloud::telemetry::verbose:                                      *cloud_global_verbose
+cloud::telemetry::debug:                                        *cloud_global_debug
 cloud::telemetry::log_facility:                                 'LOG_LOCAL3'
 cloud::telemetry::use_syslog:                                   *cloud_global_use_syslog
 cloud::telemetry::os_endpoint_type:                             'publicURL'
