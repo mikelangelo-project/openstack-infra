@@ -227,6 +227,18 @@ keystone::ldap::project_member_attribute:                       ''
 keystone::ldap::project_desc_attribute:                         ''
 keystone::ldap::project_enabled_attribute:                      ''
 keystone::ldap::project_enabled_emulation:                      false
+
+# Define default package versions / update behavior
+ceilometer::package_ensure:                                     "%{hiera('cloud::global::package_ensure')}"
+cinder::package_ensure:                                         "%{hiera('cloud::global::package_ensure')}"
+glance::package_ensure:                                         "%{hiera('cloud::global::package_ensure')}"
+glance::api::package_ensure:                                    "%{hiera('cloud::global::package_ensure')}"
+glance::registry::package_ensure:                               "%{hiera('cloud::global::package_ensure')}"
+heat::package_ensure:                                           "%{hiera('cloud::global::package_ensure')}"
+horizon::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
+keystone::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
+neutron::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
+nova::ensure_package:                                           "%{hiera('cloud::global::package_ensure')}"
 # --------------------------------------------------- Apt setup -------------------------------------------------------
 
 apt::sources:

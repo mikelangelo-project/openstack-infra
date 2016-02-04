@@ -4,15 +4,6 @@
 # Do not install nova utilities / libguestfs on controller
 nova::install_utilities:                                        false
 
-#Openstack Package Version
-nova::ensure_package:                                          "%{hiera('cloud::global::package_ensure')}"
-cinder::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
-glance::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
-keystone::package_ensure:                                      "%{hiera('cloud::global::package_ensure')}"
-horizon::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
-neutron::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
-heat::package_ensure:                                          "%{hiera('cloud::global::package_ensure')}"
-
 # Update / create nova db
 cloud::compute:db_sync:                                         true
 

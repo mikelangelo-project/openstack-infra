@@ -1,6 +1,7 @@
 #
 ---
-# Openstack Package Version
+
+# Openstack package versions (allow different versions for compute nodes for upgrades)
 nova::ensure_package:                                           "%{hiera('cloud::global::package_ensure')}"
 ceilometer::package_ensure:                                     "%{hiera('cloud::global::package_ensure')}"
 keystone::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
