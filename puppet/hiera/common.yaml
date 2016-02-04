@@ -28,6 +28,8 @@ cloud::global::ldap_server:                                     ''
 
 cloud::global::package_ensure:                                  'latest'
 
+cloud::global::use_syslog:      &cloud_global_use_syslog        true
+
 cloud::ntp_servers:
     - 'ntps1.gwdg.de'
     - 'ntps2.gwdg.de'
@@ -407,7 +409,7 @@ cloud::identity::region:                                        'RegionOne'
 cloud::identity::verbose:                                       true
 cloud::identity::debug:                                         true
 cloud::identity::log_facility:                                  'LOG_LOCAL6'
-cloud::identity::use_syslog:                                    true
+cloud::identity::use_syslog:                                    *cloud_global_use_syslog
 cloud::identity::ks_token_expiration:                           '3600'
 cloud::identity::token_driver:                                  'keystone.token.persistence.backends.sql.Token'
 cloud::identity::firewall_settings:                             {}
@@ -534,7 +536,7 @@ cloud::image::registry::ks_glance_password:                     "%{hiera('cloud:
 cloud::image::registry::verbose:                                true
 cloud::image::registry::debug:                                  true
 cloud::image::registry::log_facility:                           'LOG_LOCAL1'
-cloud::image::registry::use_syslog:                             true
+cloud::image::registry::use_syslog:                             *cloud_global_use_syslog
 cloud::image::registry::firewall_settings:                      {}
 
 # --------------------------------------------------------- Glance API setup -----------------------------------------------------
@@ -566,7 +568,7 @@ cloud::image::api::glance_rbd_user:                             'glance'
 cloud::image::api::verbose:                                     true
 cloud::image::api::debug:                                       true
 cloud::image::api::log_facility:                                'LOG_LOCAL1'
-cloud::image::api::use_syslog:                                  true
+cloud::image::api::use_syslog:                                  *cloud_global_use_syslog
 cloud::image::api::backend:                                     'nfs'
 cloud::image::api::known_stores:                                ['file', 'rbd', 'http']
 cloud::image::api::filesystem_store_datadir:                    '/var/lib/glance/images/'
@@ -607,7 +609,7 @@ cloud::volume::verbose:                                         true
 cloud::volume::debug:                                           true
 cloud::volume::log_facility:                                    'LOG_LOCAL5'
 cloud::volume::storage_availability_zone:                       'nova'
-cloud::volume::use_syslog:                                      true
+cloud::volume::use_syslog:                                      *cloud_global_use_syslog
 
 # ----------------------------------------------------- Cinder API setup -----------------------------------------------------
 
@@ -699,7 +701,7 @@ cloud::compute::neutron_region_name:                            "%{hiera('cloud:
 
 cloud::compute::verbose:                                        true
 cloud::compute::debug:                                          true
-cloud::compute::use_syslog:                                     true
+cloud::compute::use_syslog:                                     *cloud_global_use_syslog
 cloud::compute::log_facility:                                   'LOG_LOCAL0'
 cloud::compute::memcache_servers:
     - "%{hiera('cloud::global::controller1::ip')}:11211"
@@ -754,7 +756,7 @@ cloud::network::rabbit_hosts:
 cloud::network::rabbit_password:                                "%{hiera('cloud::global::rabbit::password')}"
 
 #cloud::network::api_eth:                                        '127.0.0.1'
-cloud::network::use_syslog:                                     true
+cloud::network::use_syslog:                                     *cloud_global_use_syslog
 cloud::network::log_facility:                                   'LOG_LOCAL2'
 cloud::network::dhcp_lease_duration:                            '120'
 cloud::network::plugin:                                         'ml2'
@@ -1017,7 +1019,7 @@ cloud::orchestration::rabbit_password:                          "%{hiera('cloud:
 
 cloud::orchestration::verbose:                                  true
 cloud::orchestration::debug:                                    true
-cloud::orchestration::use_syslog:                               true
+cloud::orchestration::use_syslog:                               *cloud_global_use_syslog
 cloud::orchestration::log_facility:                             'LOG_LOCAL7'
 cloud::orchestration::os_endpoint_type:                         'publicURL'
 
@@ -1071,7 +1073,7 @@ cloud::telemetry::region:                                       "%{hiera('cloud:
 cloud::telemetry::verbose:                                      true
 cloud::telemetry::debug:                                        true
 cloud::telemetry::log_facility:                                 'LOG_LOCAL3'
-cloud::telemetry::use_syslog:                                   true
+cloud::telemetry::use_syslog:                                   *cloud_global_use_syslog
 cloud::telemetry::os_endpoint_type:                             'publicURL'
 
 # ---------------------------------------------------- Ceilometer API setup ------------------------------------------------------------
