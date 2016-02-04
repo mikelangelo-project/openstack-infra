@@ -49,7 +49,7 @@ cloud::loadbalancer::enable_heat_api:                           true
 cloud::loadbalancer::enable_heat_cfn_api:                       true
 cloud::loadbalancer::enable_heat_cloudwatch_api:                true
 cloud::loadbalancer::enable_nova_api:                           true
-cloud::loadbalancer::enable_ec2_api:                            true
+cloud::loadbalancer::enable_ec2_api:                            false
 cloud::loadbalancer::enable_metadata_api:                       true
 cloud::loadbalancer::enable_keystone_api:                       true
 cloud::loadbalancer::enable_keystone_api_admin:                 true
