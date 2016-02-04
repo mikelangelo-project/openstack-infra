@@ -420,6 +420,13 @@ keystone::compute_port:                                         "%{hiera('cloud:
 keystone::public_port:                                          "%{hiera('cloud::global::api::ports::keystone')}"
 keystone::admin_port:                                           "%{hiera('cloud::global::api::ports::keystone_admin')}"
 
+# Keystone caching setup
+keystone::memcache_servers:
+    - "%{hiera('cloud::global::controller1::ip')}:11211"
+    - "%{hiera('cloud::global::controller2::ip')}:11211"
+keystone::cache_backend:                                        'keystone.cache.memcache_pool'
+keystone::memcache_socket_timeout:                              1
+
 cloud::identity::use_ldap:                                      *cloud_global_use_ldap
 cloud::identity::region:                                        'RegionOne'
 cloud::identity::verbose:                                       *cloud_global_verbose
@@ -441,10 +448,6 @@ cloud::identity::identity_roles_addons:
 cloud::identity::keystone_db_host:                              "%{hiera('cloud::global::db::host')}"
 cloud::identity::keystone_db_user:                              'keystone'
 cloud::identity::keystone_db_password:                          "%{hiera('cloud::global::db::services_password')}"
-
-cloud::identity::memcache_servers:
-    - "%{hiera('cloud::global::controller1::ip')}:11211"
-    - "%{hiera('cloud::global::controller2::ip')}:11211"
 
 cloud::identity::ks_admin_email:                                'mikelangelo-internal@gwdg.de'
 cloud::identity::ks_admin_password:                             "%{hiera('cloud::global::keystone::services_password')}"
