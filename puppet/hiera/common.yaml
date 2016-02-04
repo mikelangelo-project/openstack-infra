@@ -12,6 +12,10 @@ node::storage_ip:                                               "%{::ipaddress_v
 
 cloud::production:                                              true
 
+# Fix upgrade level
+#cloud::global::upgrade_level:                                   'liberty'
+cloud::global::upgrade_level:
+
 cloud::global::region:                                          'RegionOne'
 cloud::global::hypervisor:                                      'kvm'
 
@@ -670,6 +674,8 @@ nova::db::database_idle_timeout:                                '240'
 
 nova::rabbit_heartbeat_timeout_threshold:                       "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
 nova::rabbit_heartbeat_rate:                                    "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
+
+cloud::compute::upgrade_level:                                  "%{hiera('cloud::global::upgrade_level')}"
 
 cloud::compute::nova_db_host:                                   "%{hiera('cloud::global::db::host')}"
 cloud::compute::nova_db_use_slave:                              false
