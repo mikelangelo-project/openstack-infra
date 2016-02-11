@@ -241,6 +241,7 @@ heat::package_ensure:                                           "%{hiera('cloud:
 horizon::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
 keystone::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
 neutron::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
+neutron::agents::lbaas::package_ensure:                         "%{hiera('cloud::global::package_ensure')}"
 nova::ensure_package:                                           "%{hiera('cloud::global::package_ensure')}"
 # --------------------------------------------------- Apt setup -------------------------------------------------------
 
@@ -801,6 +802,12 @@ cloud::network::plugin:                                         'ml2'
 cloud::network::service_plugins:
     - 'neutron.services.metering.metering_plugin.MeteringPlugin'
     - 'neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'
+    - 'neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPlugin'
+
+# ---------------------------------------------------- Neutron LBaaS setup ----------------------------------------------------------
+
+cloud::network::lbaas_enabled:                                  true
+cloud::network::lbaas_service_provider:                         LOADBALANCER:Haproxy:neutron_lbaas.services.loadbalancer.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default
 
 # ---------------------------------------------------- Neutron controller setup -----------------------------------------------------
 
