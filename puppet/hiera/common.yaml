@@ -1040,6 +1040,11 @@ cloud::dashboard::firewall_settings:                            {}
 heat::rabbit_heartbeat_timeout_threshold:                       "%{hiera('cloud::global::rabbitmq::heartbeat_timeout_threshold')}"
 heat::rabbit_heartbeat_rate:                                    "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
 
+heat::keystone::domain::domain_name:                            'heat'
+heat::keystone::domain::domain_admin:                           'heat_admin'
+heat::keystone::domain::domain_admin_email:                     "%{hiera('cloud::identity::ks_admin_email')}"
+heat::keystone::domain::domain_password:                        "%{hiera('cloud::global::api::passwords::heat')}"
+
 cloud::orchestration::ks_keystone_internal_host:                "%{hiera('cloud::global::internal_api_host')}"
 cloud::orchestration::ks_keystone_internal_port:                "%{hiera('cloud::global::api::ports::keystone')}"
 cloud::orchestration::ks_keystone_internal_proto:               "%{hiera('cloud::global::internal_api_proto')}"
