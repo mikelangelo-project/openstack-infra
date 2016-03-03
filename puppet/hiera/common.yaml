@@ -77,7 +77,7 @@ cloud::global::storage::ceph_cluster_network:                   '10.108.31.128/2
 
 cloud::global::storage::nfs_server:                             '10.108.32.25'
 cloud::global::storage::nfs_share:                              '/ifs/mikelangelo/liberty'
-cloud::global::storage::nfs_options:                            '_netdev,vers=3'
+cloud::global::storage::nfs_options:                            '_netdev,vers=3,noauto'
 
 # Network setup
 
