@@ -300,7 +300,7 @@ cloud::storage::rbd::pools::ceph_fsid:                          "%{hiera('cloud:
 
 # -------------------------------------------------- Ceph client setup -------------------------------------------------------
 
-cloud::storage::rbd:enable:                                     false
+cloud::storage::rbd::enable:                                    false
 
 cloud::storage::rbd::fsid:                                      "%{hiera('cloud::global::storage::ceph_fsid')}"
 
