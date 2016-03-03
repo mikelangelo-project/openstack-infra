@@ -7,6 +7,9 @@ ceilometer::package_ensure:                                     "%{hiera('cloud:
 keystone::package_ensure:                                       "%{hiera('cloud::global::package_ensure')}"
 neutron::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
 
+# When using ceph ephemeral backend for nova when want special ceph client configuration on compute nodes
+cloud::storage::rbd::compute_node:                              true
+
 # Vnc / spice proxy (management ip of compute node)
 cloud::compute::hypervisor::server_proxyclient_address:         "%{hiera('node::management_ip')}"
 
