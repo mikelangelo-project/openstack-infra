@@ -183,7 +183,7 @@ cloud::identity::keystone_master_name:                          "%{hiera('cloud:
 cloud::messaging::rabbitmq_master_name:                         "%{hiera('cloud::global::controller_master_name')}"
 
 cloud::global::nova::internal_url:                              "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_host')}:%{hiera('cloud::global::api::ports::nova')}/v2"
-cloud::global::keystone::internal_url:                          "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_host')}:%{hiera('cloud::global::api::ports::keystone')}/v2.0"
+cloud::global::keystone::internal_url:                          "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_host')}:%{hiera('cloud::global::api::ports::keystone')}"
 
 cloud::database::sql::mysql::mysql_root_password:               "%{hiera('cloud::global::db::root_password')}"
 
@@ -435,6 +435,9 @@ keystone::rabbit_heartbeat_timeout_threshold:                   "%{hiera('cloud:
 keystone::rabbit_heartbeat_rate:                                "%{hiera('cloud::global::rabbitmq::heartbeat_rate')}"
 
 #keystone::default_domain:                                       'default'
+
+# Keystone endpoint verion in catalog, use '' for generic / v3 (currently only Horizon seems to have problems with this)
+keystone::endpoint::version:                                    'v2.0'
 
 keystone::compute_port:                                         "%{hiera('cloud::global::api::ports::nova')}"
 keystone::public_port:                                          "%{hiera('cloud::global::api::ports::keystone')}"
