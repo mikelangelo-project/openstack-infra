@@ -64,7 +64,7 @@ create_mirror   "mariadb"       "http://mirrors.n-ix.net/mariadb/repo/10.0/ubunt
 create_mirror   "liberty-staging"   "http://ppa.launchpad.net/ubuntu-cloud-archive/liberty-staging/ubuntu"    "trusty main"                   "9F68104E"  ""
 #create_mirror   "liberty"       "http://ubuntu-cloud.archive.canonical.com/ubuntu"                      "trusty-updates/liberty main"   "EC4926EA"  ""
 
-create_mirror   "puppetlabs"    "http://apt.puppetlabs.com"                                             "trusty"                        "4BD6EC30"  ""
+create_mirror   "puppetlabs"    "http://apt.puppetlabs.com"                                             "trusty"                        "4BD6EC30"  "-filter-with-deps=true" "-filter=(puppetmaster (>= 3.8.6) | puppet (>= 3.8.6) | puppet-el (>= 3.8.6) | puppetdb-terminus (>= 2.3.8) | puppetdb (>= 2.3.8)) , puppetdb (< 3.0)"
 
 # Using package directly as this repo gets updated with instable versions
 #create_mirror   "rabbitmq"      "http://www.rabbitmq.com/debian"                                       "testing"                       "056E8E56"  "" 
@@ -76,7 +76,7 @@ create_mirror   "haproxy"       "ppa:vbernat/haproxy-1.5"                       
 
 create_mirror   "mongodb"       "http://downloads-distro.mongodb.org/repo/ubuntu-upstart"               "dist 10gen"                    "7F0CEB10"  "-filter-with-deps=true" "-filter=mongodb-org (>= 2.6.11)"
 
-create_mirror   "logstash"      "http://packages.elasticsearch.org/logstash/1.5/debian"                 "stable main"                   "D88E42B4"  ""
+create_mirror   "logstash"      "http://packages.elasticsearch.org/logstash/1.5/debian"                 "stable main"                   "D88E42B4"  "-filter-with-deps=true" "-filter=logstash (>= 1.5.6)"
 
 create_mirror   "ceph"          "http://ceph.com/debian-hammer/"                                        "trusty main"                   "460F3994"  ""
 
