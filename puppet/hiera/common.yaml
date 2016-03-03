@@ -49,6 +49,8 @@ cloud::manage_root_password:                                    false
 
 # Storage setup
 
+cloud::global::storage::glance_backend:                         'nfs'
+
 cloud::global::storage::ceph_glance_key:                        ''
 cloud::global::storage::ceph_glance_user:                       'glance'
 cloud::global::storage::ceph_glance_pool:                       'os-images'
@@ -607,13 +609,14 @@ cloud::image::api::rabbit_host:                                 "%{hiera('cloud:
 
 #cloud::image::api::api_eth:                                     '127.0.0.1'
 cloud::image::api::openstack_vip:                               "%{hiera('cloud::global::internal_api_host')}"
-cloud::image::api::glance_rbd_pool:                             'images'
-cloud::image::api::glance_rbd_user:                             'glance'
+cloud::image::api::glance_rbd_pool:                             "%{hiera('cloud::global::storage::ceph_glance_pool')}"
+cloud::image::api::glance_rbd_user:                             "%{hiera('cloud::global::storage::ceph_glance_user')}"
+cloud::image::api::glance_rbd_key:                              "%{hiera('cloud::global::storage::ceph_glance_key')}"
 cloud::image::api::verbose:                                     *cloud_global_verbose
 cloud::image::api::debug:                                       *cloud_global_debug
 cloud::image::api::log_facility:                                'LOG_LOCAL1'
 cloud::image::api::use_syslog:                                  *cloud_global_use_syslog
-cloud::image::api::backend:                                     'nfs'
+cloud::image::api::backend:                                     "%{hiera('cloud::global::storage::glance_backend')}"
 cloud::image::api::known_stores:                                ['file', 'rbd', 'http']
 cloud::image::api::filesystem_store_datadir:                    '/var/lib/glance/images/'
 cloud::image::api::nfs_server:                                  "%{hiera('cloud::global::storage::nfs_server')}"
