@@ -391,32 +391,6 @@ mongodb::globals::version:                                      '2.6.11'
 
 mongodb::server::verbose:                                       *cloud_global_verbose
 mongodb::server::replset:                                       'ceilometer'
-#::mongodb::server::bind_ip:                                     '127.0.0.1'
-#mongodb::replset::sets:
-#    ceilometer:
-#        members:
-#            - "%{hiera('vagrant::ip_prefix')}.1.71:27017"
-#            - "%{hiera('vagrant::ip_prefix')}.1.72:27017"
-#            - "%{hiera('vagrant::ip_prefix')}.1.73:27017"
-
-# Use just a replica set for now...
-#cloud::database::nosql::mongodb::mongos::enable:                true
-#cloud::database::nosql::mongodb::mongos::shards:                {}
-#cloud::database::nosql::mongodb::mongos::mongos_port:           '27017'
-#cloud::database::nosql::mongodb::mongos::firewall_settings:     {}
-
-# ------------------------------------------------- MongoDB (mongod) setup -----------------------------------------------------
-
-#cloud::database::nosql::mongodb::mongod::enable:                true
-#cloud::database::nosql::mongodb::mongod::replset:
-#    ceilometer:
-#        members:
-#            - "%{hiera('vagrant::ip_prefix')}.1.71:27017"
-#            - "%{hiera('vagrant::ip_prefix')}.1.72:27017"
-#            - "%{hiera('vagrant::ip_prefix')}.1.73:27017"
-
-#cloud::database::nosql::mongodb::mongod::mongod_port:           '27017'
-#cloud::database::nosql::mongodb::mongod::firewall_settings:     {}
 
 # ----------------------------------------------------  RabbitMQ setup -----------------------------------------------------
 
@@ -1018,8 +992,6 @@ cloud::dashboard::horizon_ssl_port:                             "%{hiera('cloud:
 #cloud::dashboard::servername:                                   "%{::fqdn}"
 cloud::dashboard::servername:                                   'horizon.mikelangelo.gwdg.de'
 
-#cloud::dashboard::api_eth:                                      '127.0.0.1'
-
 cloud::dashboard::keystone_host:                                "%{hiera('cloud::global::internal_api_host')}"
 cloud::dashboard::keystone_proto:                               "%{hiera('cloud::global::internal_api_proto')}"
 cloud::dashboard::keystone_port:                                "%{hiera('cloud::global::api::ports::keystone')}"
@@ -1028,9 +1000,6 @@ cloud::dashboard::debug:                                        *cloud_global_de
 
 # Deploy horizon in apache with ssl (needs certs set)
 cloud::dashboard::listen_ssl:                                   false
-#cloud::dashboard::horizon_cert:                                 undef
-#cloud::dashboard::horizon_key:                                  undef
-#cloud::dashboard::horizon_ca:                                   undef
 
 # Useful / necessary with haproxy ssl termination
 cloud::dashboard::ssl_forward:                                  true
@@ -1091,7 +1060,6 @@ cloud::orchestration::api::ks_heat_internal_port:               "%{hiera('cloud:
 cloud::orchestration::api::ks_heat_cfn_internal_port:           "%{hiera('cloud::global::api::ports::heat_cfn')}"
 cloud::orchestration::api::ks_heat_cloudwatch_internal_port:    "%{hiera('cloud::global::api::ports::heat_cloudwatch')}"
 
-#cloud::orchestration::api::api_eth:                             '127.0.0.1'
 cloud::orchestration::api::workers:                             "%{hiera('cloud::global::workers')}"
 cloud::orchestration::api::firewall_settings:                   {}
 
