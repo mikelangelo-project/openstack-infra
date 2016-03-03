@@ -50,6 +50,9 @@ cloud::manage_root_password:                                    false
 # Storage setup
 
 cloud::global::storage::glance_backend:                         'nfs'
+cloud::global::storage::cinder_ceph_volumes:                    &cloud_global_storage_cinder_ceph_volumes           false
+cloud::global::storage::nova_ceph_ephemeral_storage:            &cloud_global_storage_nova_ceph_ephemeral_storage   false
+cloud::global::storage::nova_nfs_ephemeral_storage:             &cloud_global_storage_nova_nfs_ephemeral_storage    true
 
 cloud::global::storage::ceph_glance_key:                        ''
 cloud::global::storage::ceph_glance_user:                       'glance'
@@ -905,7 +908,7 @@ cloud::compute::hypervisor::nova_shell:                         false
 cloud::compute::hypervisor::firewall_settings:                  {}
   
 # NFS storage backend
-cloud::compute::hypervisor::nfs_enabled:                        true
+cloud::compute::hypervisor::nfs_enabled:                        *cloud_global_storage_nova_nfs_ephemeral_storage
 cloud::compute::hypervisor::nfs_server:                         "%{hiera('cloud::global::storage::nfs_server')}"
 cloud::compute::hypervisor::nfs_share:                          "%{hiera('cloud::global::storage::nfs_share')}"
 cloud::compute::hypervisor::nfs_options:                        "%{hiera('cloud::global::storage::nfs_options')}"
@@ -917,8 +920,8 @@ cloud::compute::hypervisor::nova_rbd_secret_uuid:               "%{hiera('cloud:
 cloud::compute::hypervisor::cinder_rbd_user:                    "%{hiera('cloud::global::storage::ceph_cinder_user')}"
 cloud::compute::hypervisor::cinder_rbd_key:                     "%{hiera('cloud::global::storage::ceph_cinder_key')}"
 cloud::compute::hypervisor::nova_rbd_pool:                      "%{hiera('cloud::global::storage::ceph_nova_pool')}"
-cloud::compute::hypervisor::vm_rbd:                             false
-cloud::compute::hypervisor::volume_rbd:                         false
+cloud::compute::hypervisor::vm_rbd:                             *cloud_global_storage_nova_ceph_ephemeral_storage
+cloud::compute::hypervisor::volume_rbd:                         *cloud_global_storage_cinder_ceph_volumes
 
 # --------------------------------------------------- Neutron vswitch setup  -----------------------------------------------------
 
