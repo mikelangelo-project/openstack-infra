@@ -18,6 +18,7 @@ cloud::global::upgrade_level:
 
 cloud::global::region:                                          'RegionOne'
 cloud::global::hypervisor:                                      'kvm'
+cloud::global::hypervisor_cpu_mode:                             'host-passthrough'
 
 cloud::global::workers:                                         8
 
