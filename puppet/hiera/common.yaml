@@ -192,7 +192,7 @@ cloud::identity::keystone_master_name:                          "%{hiera('cloud:
 cloud::messaging::rabbitmq_master_name:                         "%{hiera('cloud::global::controller_master_name')}"
 
 cloud::global::nova::internal_url:                              "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_host')}:%{hiera('cloud::global::api::ports::nova')}/v2"
-cloud::global::keystone::internal_url:                          "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_host')}:%{hiera('cloud::global::api::ports::keystone')}"
+cloud::global::keystone::internal_url:                          "%{hiera('cloud::global::internal_api_proto')}://%{hiera('cloud::global::internal_api_host')}:%{hiera('cloud::global::api::ports::keystone')}/v2.0"
 
 cloud::database::sql::mysql::mysql_root_password:               "%{hiera('cloud::global::db::root_password')}"
 
