@@ -438,7 +438,7 @@ cloud::identity::verbose:                                       *cloud_global_ve
 cloud::identity::debug:                                         *cloud_global_debug
 cloud::identity::log_facility:                                  'LOG_LOCAL6'
 cloud::identity::use_syslog:                                    *cloud_global_use_syslog
-cloud::identity::ks_token_expiration:                           '3600'
+cloud::identity::ks_token_expiration:                           '7200'
 cloud::identity::token_driver:                                  'keystone.token.persistence.backends.sql.Token'
 cloud::identity::firewall_settings:                             {}
 
