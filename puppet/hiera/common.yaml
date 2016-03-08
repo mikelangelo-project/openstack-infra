@@ -253,6 +253,8 @@ keystone::package_ensure:                                       "%{hiera('cloud:
 neutron::package_ensure:                                        "%{hiera('cloud::global::package_ensure')}"
 neutron::agents::lbaas::package_ensure:                         "%{hiera('cloud::global::package_ensure')}"
 nova::ensure_package:                                           "%{hiera('cloud::global::package_ensure')}"
+openstacklib::openstackclient::package_ensure:                  "%{hiera('cloud::global::package_ensure')}"
+
 # --------------------------------------------------- Apt setup -------------------------------------------------------
 
 apt::sources:
