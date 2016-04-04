@@ -121,8 +121,8 @@ cloud::global::public_api_vip:                                  '141.5.112.40'
 cloud::global::internal_api_vip:                                '10.108.0.40'
 cloud::global::admin_api_vip:                                   "%{hiera('cloud::global::internal_api_vip')}"
 
-cloud::global::public_api_proto:                                'https'
-cloud::global::public_api_host:                                 'api.liberty.mikelangelo.gwdg.de'
+cloud::global::public_api_proto:                                'http'
+cloud::global::public_api_host:                                 'api-i.dev.cloud.gwdg.de'
 
 cloud::global::internal_api_proto:                              'http'
 cloud::global::internal_api_host:                               'api-i.liberty.mikelangelo.gwdg.de'
@@ -389,7 +389,7 @@ cloud::database::nosql::memcached::firewall_settings:           {}
 
 mongodb::globals::manage_package_repo:                          false
 mongodb::globals::manage_package:                               true
-mongodb::globals::version:                                      '2.6.11'
+mongodb::globals::version:                                      '2.6.12'
 
 mongodb::server::verbose:                                       *cloud_global_verbose
 mongodb::server::replset:                                       'ceilometer'
