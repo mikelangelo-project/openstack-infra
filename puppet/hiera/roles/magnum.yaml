@@ -1,0 +1,25 @@
+#
+---
+
+cloud:
+  container:
+
+    verbose:                      *cloud_global_verbose
+    debug:                        *cloud_global_debug
+    use_syslog:                   *cloud_global_use_syslog
+    log_facility:                 'LOG_LOCAL0'
+    rabbit_hosts:
+      - "%{hiera('cloud::global::controller1::rabbitmq')}"
+      - "%{hiera('cloud::global::controller2::rabbitmq')}"
+    rabbit_password:              "%{hiera('cloud::global::rabbit::password')}"
+    magnum_db_user:               "%{hiera('cloud::global::db::magnum_user')}"
+    magnum_db_password:           "%{hiera('cloud::global::db::magnum_password')}"
+    magnum_db_host:               "%{hiera('cloud::global::db::host')}"
+
+    api:
+      ks_magnum_internal_port:      "%{hiera('cloud::global::api::ports::magnum')}"
+      ks_keystone_internal_host:    "%{hiera('cloud::global::internal_api_host')}"
+      ks_keystone_internal_port:    "%{hiera('cloud::global::api::ports::keystone')}"
+      ks_keystone_internal_proto:   "%{hiera('cloud::global::internal_api_proto')}"
+      ks_keystone_admin_port:       "%{hiera('cloud::global::api::ports::keystone_admin')}"
+      ks_magnum_password:           "%{hiera('cloud::global::api::passwords::magnum')}"
