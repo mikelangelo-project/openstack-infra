@@ -989,6 +989,7 @@ cloud::network::metadata::ks_nova_internal_proto:               "%{hiera('cloud:
 
 horizon::keystone_multidomain_support:                          true
 horizon::log_handler:                                           'syslog'
+horizon::keystone_default_role:                                 'user'
 
 # Unused in module
 cloud::dashboard::ks_keystone_internal_host:                    "%{hiera('cloud::global::internal_api_host')}"
