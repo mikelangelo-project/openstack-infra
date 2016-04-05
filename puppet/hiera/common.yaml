@@ -414,6 +414,10 @@ cloud::messaging::firewall_settings:                            {}
 # ----------------------------------------------------- Keystone setup -----------------------------------------------------
 
 # Keystone base module configuration
+
+# NOTE: Change to 'true' for Mitaka
+keystone::enable_bootstrap:                                     false
+
 keystone::admin_workers:                                        "%{hiera('cloud::global::workers')}"
 keystone::public_workers:                                       "%{hiera('cloud::global::workers')}"
 
