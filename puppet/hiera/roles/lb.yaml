@@ -43,6 +43,7 @@ cloud::loadbalancer::enable_cinder_api:                         true
 cloud::loadbalancer::enable_glance_api:                         true
 cloud::loadbalancer::enable_glance_registry:                    true
 cloud::loadbalancer::enable_neutron_api:                        true
+cloud::loadbalancer::enable_magnum_api:                         true
 cloud::loadbalancer::enable_heat_api:                           true
 cloud::loadbalancer::enable_heat_cfn_api:                       true
 cloud::loadbalancer::enable_heat_cloudwatch_api:                true
@@ -72,6 +73,7 @@ cloud::loadbalancer::glance_api_options:                        {}
 cloud::loadbalancer::glance_registry_options:                   {}                                                                                                                                          
 cloud::loadbalancer::heat_cfn_options:                          {}
 cloud::loadbalancer::heat_cloudwatch_options:                   {}
+cloud::loadbalancer::magnum_api_options:                        {}
 cloud::loadbalancer::heat_api_options:                          {}
 cloud::loadbalancer::keystone_options:                          {}
 cloud::loadbalancer::keystone_admin_options:                    {}
@@ -96,6 +98,7 @@ cloud::loadbalancer::ks_cinder_public_port:                     "%{hiera('cloud:
 cloud::loadbalancer::ks_ec2_public_port:                        "%{hiera('cloud::global::api::ports::nova_ec2')}"
 cloud::loadbalancer::ks_glance_api_public_port:                 "%{hiera('cloud::global::api::ports::glance')}"
 cloud::loadbalancer::ks_glance_registry_internal_port:          "%{hiera('cloud::global::api::ports::glance_registry')}"
+cloud::loadbalancer::ks_magnum_public_port                      "%{hiera('cloud::global::api::ports::magnum')}"
 cloud::loadbalancer::ks_heat_cfn_public_port:                   "%{hiera('cloud::global::api::ports::heat_cfn')}"
 cloud::loadbalancer::ks_heat_cloudwatch_public_port:            "%{hiera('cloud::global::api::ports::heat_cloudwatch')}"
 cloud::loadbalancer::ks_heat_public_port:                       "%{hiera('cloud::global::api::ports::heat')}"
