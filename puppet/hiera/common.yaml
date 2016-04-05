@@ -1024,6 +1024,12 @@ cloud::dashboard::vhost_extra_params:
 cloud::dashboard::neutron_extra_options:                        {}
 cloud::dashboard::firewall_settings:                            {}
 
+# ------------------------------------------------------- Container common setup ------------------------------------------------
+
+cloud::container::verbose:                                      *cloud_global_verbose
+cloud::container::debug:                                        *cloud_global_debug
+cloud::container::use_syslog:                                   *cloud_global_use_syslog
+
 # ------------------------------------------------------- Heat common setup -----------------------------------------------------
 
 # Heat base module configuration

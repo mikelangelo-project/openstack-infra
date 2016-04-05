@@ -4,9 +4,6 @@
 cloud:
   container:
 
-    verbose:                      *cloud_global_verbose
-    debug:                        *cloud_global_debug
-    use_syslog:                   *cloud_global_use_syslog
     log_facility:                 'LOG_LOCAL0'
     rabbit_hosts:
       - "%{hiera('cloud::global::controller1::rabbitmq')}"
