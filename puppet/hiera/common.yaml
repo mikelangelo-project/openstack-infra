@@ -356,18 +356,13 @@ cloud::global::db::magnum_user:                                 'magnum'
 cloud::global::db::magnum_password:                             "%{hiera('cloud::global::db::services_password')}"
 # ------------------------------------------------ Auth file setup -----------------------------------------------------
 
-cloud::auth_file::admin_password:                               "%{hiera('cloud::identity::ks_admin_password')}"
-cloud::auth_file::controller_node:                              "%{hiera('cloud::global::internal_api_host')}"
-cloud::auth_file::keystone_admin_token:                         "%{hiera('cloud::identity::ks_admin_token')}"
-cloud::auth_file::admin_user:                                   "%{hiera('cloud::global::keystone::admin_user')}"
-cloud::auth_file::admin_tenant:                                 "%{hiera('cloud::identity::ks_admin_tenant')}"
-cloud::auth_file::region_name:                                  "%{hiera('cloud::global::region')}"
-cloud::auth_file::use_no_cache:                                 true
-cloud::auth_file::cinder_endpoint_type:                         'publicURL'
-cloud::auth_file::glance_endpoint_type:                         'publicURL'
-cloud::auth_file::keystone_endpoint_type:                       'publicURL'
-cloud::auth_file::nova_endpoint_type:                           'publicURL'
-cloud::auth_file::neutron_endpoint_type:                        'publicURL'
+cloud::auth_file::keystone_host:                                "%{hiera('cloud::global::internal_api_host')}"
+cloud::auth_file::password:                                     "%{hiera('cloud::identity::ks_admin_password')}"
+#cloud::auth_file::admin_token:                                 "%{hiera('cloud::identity::ks_admin_token')}"
+cloud::auth_file::user:                                         "%{hiera('cloud::global::keystone::admin_user')}"
+cloud::auth_file::project:                                      "%{hiera('cloud::identity::ks_admin_tenant')}"
+cloud::auth_file::interface_type:                               'internal'
+cloud::auth_file::domain_id:                                    'default'
 
 # ------------------------------------------------ Logging server setup --------------------------------------------------
 
