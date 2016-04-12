@@ -58,7 +58,9 @@ $APTLY repo show -with-packages $LOCAL_REPOSITORY
 
 #add_package "$LOCAL_REPOSITORY" "http://www.rabbitmq.com/releases/rabbitmq-server/v3.5.4/rabbitmq-server_3.5.4-1_all.deb"   "rabbitmq-server_3.5.4-1_all.deb" ""
 
-add_package "$LOCAL_REPOSITORY" "http://www.rabbitmq.com/releases/rabbitmq-server/v3.5.7/rabbitmq-server_3.5.7-1_all.deb"   "rabbitmq-server_3.5.7-1_all.deb"
+#add_package "$LOCAL_REPOSITORY" "http://www.rabbitmq.com/releases/rabbitmq-server/v3.5.7/rabbitmq-server_3.5.7-1_all.deb"   "rabbitmq-server_3.5.7-1_all.deb"
+
+add_package "$LOCAL_REPOSITORY" "http://www.rabbitmq.com/releases/rabbitmq-server/v3.6.1/rabbitmq-server_3.6.1-1_all.deb"   "rabbitmq-server_3.6.1-1_all.deb"
 
 
 
