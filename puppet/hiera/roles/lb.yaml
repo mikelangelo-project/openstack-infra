@@ -98,7 +98,7 @@ cloud::loadbalancer::ks_cinder_public_port:                     "%{hiera('cloud:
 cloud::loadbalancer::ks_ec2_public_port:                        "%{hiera('cloud::global::api::ports::nova_ec2')}"
 cloud::loadbalancer::ks_glance_api_public_port:                 "%{hiera('cloud::global::api::ports::glance')}"
 cloud::loadbalancer::ks_glance_registry_internal_port:          "%{hiera('cloud::global::api::ports::glance_registry')}"
-cloud::loadbalancer::ks_magnum_public_port                      "%{hiera('cloud::global::api::ports::magnum')}"
+cloud::loadbalancer::ks_magnum_public_port:                     "%{hiera('cloud::global::api::ports::magnum')}"
 cloud::loadbalancer::ks_heat_cfn_public_port:                   "%{hiera('cloud::global::api::ports::heat_cfn')}"
 cloud::loadbalancer::ks_heat_cloudwatch_public_port:            "%{hiera('cloud::global::api::ports::heat_cloudwatch')}"
 cloud::loadbalancer::ks_heat_public_port:                       "%{hiera('cloud::global::api::ports::heat')}"
