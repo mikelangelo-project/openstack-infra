@@ -1026,10 +1026,10 @@ cloud::container::verbose:                                      *cloud_global_ve
 cloud::container::debug:                                        *cloud_global_debug
 cloud::container::use_syslog:                                   *cloud_global_use_syslog
 
-cloud::container::magnum_domain_name:                           'magnum'
-cloud::container::magnum_domain_admin:                          'magnum_admin'
-cloud::container::magnum_domain_admin_email:                    'magnum_admin@localhost'
-cloud::container::magnum_domain_password:                       "%{hiera('cloud::global::api::passwords::magnum')}"
+cloud::container::domain::magnum_domain_name:                   'magnum'
+cloud::container::domain::magnum_domain_admin:                  'magnum_admin'
+cloud::container::domain::magnum_domain_admin_email:            'magnum_admin@localhost'
+cloud::container::domain::magnum_domain_password:               "%{hiera('cloud::global::api::passwords::magnum')}"
 
 # ------------------------------------------------------- Heat common setup -----------------------------------------------------
 
