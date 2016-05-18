@@ -197,3 +197,7 @@ url=https://github.com/gwdg/puppet-dns.git
 	path = puppet/modules/python
 	url = https://msrba@github.com/gwdg/puppet-python.git
 	branch = liberty
+[submodule "puppet/modules/collectd"]
+	path = puppet/modules/collectd
+	url = https://github.com/gwdg/puppet-collectd.git
+	branch = liberty
