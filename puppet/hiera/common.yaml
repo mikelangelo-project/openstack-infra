@@ -451,6 +451,7 @@ cloud::identity::firewall_settings:                             {}
 cloud::identity::swift_enabled:                                 false
 cloud::identity::cinder_enabled:                                true
 cloud::identity::trove_enabled:                                 false
+cloud::identity::magnum_enabled:                                true
 
 cloud::identity::identity_roles_addons:
     - 'SwiftOperator'
@@ -541,6 +542,11 @@ cloud::identity::magnum_internal_url:                           "%{hiera('cloud:
 cloud::identity::magnum_admin_url:                              "%{hiera('cloud::global::admin_api')}:%{hiera('cloud::global::api::ports::magnum')}/v1"
 
 cloud::identity::magnum_password:                               "%{hiera('cloud::global::api::passwords::magnum')}"
+
+cloud::identity::magnum_domain_name:                            'magnum'
+cloud::identity::magnum_domain_admin:                           'magnum_admin'
+cloud::identity::magnum_domain_admin_email:                     'magnum_admin@localhost'
+cloud::identity::magnum_domain_password:                        "%{hiera('cloud::global::api::passwords::magnum')}"
 
 # ----------------------------------------------------- Glance registry setup -----------------------------------------------------
 
