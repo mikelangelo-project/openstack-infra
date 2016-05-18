@@ -16,3 +16,4 @@ cloud::container::api::ks_keystone_internal_port:    "%{hiera('cloud::global::ap
 cloud::container::api::ks_keystone_internal_proto:   "%{hiera('cloud::global::internal_api_proto')}"
 cloud::container::api::ks_keystone_admin_port:       "%{hiera('cloud::global::api::ports::keystone_admin')}"
 cloud::container::api::ks_magnum_password:           "%{hiera('cloud::global::api::passwords::magnum')}"
+cloud::container::api::api_eth:                      "%{hiera('node::management_ip')}"
